@@ -63,22 +63,20 @@ PNG grayscale(PNG image) {
 PNG createSpotlight(PNG image, int centerX, int centerY) {
   for (unsigned x = 0; x < image.width(); x++) {
     for (unsigned y = 0; y < image.height(); y++) {
+      HSLAPixel & pixel = image.getPixel(x, y);
       
       //calculating distance
-      double x_squared = pow((x - centerX), 2);
-      double y_squared = pow((y - centerY), 2);
+      double x_squared = pow((centerX - x), 2);
+      double y_squared = pow((centerY - y), 2);
       double c = sqrt(x_squared + y_squared);
 
       //Determining luminance
-      double dec;
       if (c <= 160) {
-        dec = c * 0.025;
+        pixel.l = pixel.l - ((c * 0.005) * pixel.l);
       }
       else {
-        dec = 0.8;
+        pixel.l = pixel.l - (pixel.l * 0.8);
       }
-      HSLAPixel & pixel = image.getPixel(x, y);
-      pixel.l = (1 - dec) * pixel.l;
     }
   }
 
@@ -104,7 +102,7 @@ PNG illinify(PNG image) {
 
       // Illini Orange = 11
       //Illini Blue = 216
-      if (pixel.h >= 240 && pixel.h < 2) {
+      if (pixel.h >= 293.5 || pixel.h < 113.5) {
         pixel.h = 11;
       }
       else {
