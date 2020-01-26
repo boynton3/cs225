@@ -62,14 +62,14 @@ PNG grayscale(PNG image) {
  */
 PNG createSpotlight(PNG image, int centerX, int centerY) {
   for (unsigned x = 0; x < image.width(); x++) {
-    for (unsigned y = 0; y < image.width(); x++) {
+    for (unsigned y = 0; y < image.height(); y++) {
       
       //calculating distance
       double x_squared = pow((x - centerX), 2);
       double y_squared = pow((y - centerY), 2);
       double c = sqrt(x_squared + y_squared);
 
-      //Assigning luminace
+      //Determining luminance
       double dec;
       if (c <= 160) {
         dec = c * 0.025;
@@ -98,6 +98,20 @@ PNG createSpotlight(PNG image, int centerX, int centerY) {
  * @return The illinify'd image.
 **/
 PNG illinify(PNG image) {
+  for (unsigned x = 0; x < image.width(); x++) {
+    for (unsigned y = 0; y < image.height(); y++) {
+      HSLAPixel & pixel = image.getPixel(x, y);
+
+      // Illini Orange = 11
+      //Illini Blue = 216
+      if (pixel.h >= 240 && pixel.h < 2) {
+        pixel.h = 11;
+      }
+      else {
+        pixel.h = 216;
+      }
+    }
+  }   
 
   return image;
 }
@@ -116,6 +130,17 @@ PNG illinify(PNG image) {
 * @return The watermarked image.
 */
 PNG watermark(PNG firstImage, PNG secondImage) {
-
+  //checking luminace of SECOND IMAGE
+  for (unsigned x = 0; x < secondImage.width(); x++) {
+    for (unsigned y = 0; y < secondImage.height(); y++) {
+      HSLAPixel & pixel_one  = firstImage.getPixel(x, y);
+      HSLAPixel & pixel_two = secondImage.getPixel(x, y); 
+      if (x < firstImage.width() && y < firstImage.height()) {
+        if (pixel_two.l == 1) {
+          pixel_one.l += 0.2;
+        }
+      }
+    }
+  }
   return firstImage;
 }
