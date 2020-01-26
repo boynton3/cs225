@@ -66,16 +66,16 @@ PNG createSpotlight(PNG image, int centerX, int centerY) {
       HSLAPixel & pixel = image.getPixel(x, y);
       
       //calculating distance
-      double x_squared = pow((centerX - x), 2);
-      double y_squared = pow((centerY - y), 2);
+      double x_squared = (centerX - x) * (centerX - x);
+      double y_squared = (centerY - y) * (centerY - y);
       double c = sqrt(x_squared + y_squared);
 
       //Determining luminance
       if (c <= 160) {
-        pixel.l = pixel.l - ((c * 0.005) * pixel.l);
+        pixel.l = pixel.l - (c * 0.005)*pixel.l;
       }
       else {
-        pixel.l = pixel.l - (pixel.l * 0.8);
+        pixel.l = pixel.l * 0.2;
       }
     }
   }
