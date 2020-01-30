@@ -23,7 +23,7 @@ void rotate(std::string inputFile, std::string outputFile) {
       //get current pixel 
       HSLAPixel& pixel = original.getPixel(x,y);
       //shift each pixel 
-      HSLAPixel& rotate = output.getPixel(w - x - 1, h - y);
+      HSLAPixel& rotate = output.getPixel(w - x - 1, h - y - 1);
       rotate = pixel;
     }
   }
