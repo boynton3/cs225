@@ -58,9 +58,12 @@ void sketchify(std::string inputFile, std::string outputFile) {
 
             // If the pixel is an edge pixel,
             // color the output pixel with my favorite color
-            HSLAPixel currOutPixel = (*output).getPixel(x, y);
+            /* get memory address to output and set it a different 
+            object pointer. Also avoids converting object pointers. Don't delete mypixel */
+            HSLAPixel* currOutPixel = &(output->getPixel(x, y));
             if (diff > 20) {
-                currOutPixel = *myPixel;
+                //changes the pixels memory address to hue # of favorite color pixel
+                *currOutPixel = *myPixel;
             }
         }
     }
@@ -69,7 +72,7 @@ void sketchify(std::string inputFile, std::string outputFile) {
     output->writeToFile(outputFile);
 
     // Clean up memory
-    delete myPixel;
+    //delete myPixel;
     delete output;
     delete original;
 }
