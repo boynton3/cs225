@@ -11,6 +11,12 @@
 #include "allocator.h"
 #include "fileio.h"
 
+//Trying to deallocate all this memory but we had no constructors to do so
+Allocator::~Allocator(){
+    delete [] alpha;
+    delete [] rooms;
+}
+
 Allocator::Allocator(const std::string& studentFile, const std::string& roomFile)
 {
     createLetterGroups();
@@ -44,6 +50,8 @@ void Allocator::loadRooms(const std::string& file)
 {
     // Read in rooms
     fileio::loadRooms(file);
+    //room count is not initialized
+    roomCount = fileio::getNumRooms();
     rooms = new Room[roomCount];
 
     totalCapacity = 0;
