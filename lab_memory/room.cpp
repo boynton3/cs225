@@ -62,8 +62,8 @@ void Room::print(std::ostream & stream /* = std::cout */)
 void Room::clear()
 {
     if (letters != NULL)
-
-        delete letters;
+    //letters is an array of
+        delete [] letters;
 }
 
 void Room::copy(const Room& other)
@@ -72,6 +72,11 @@ void Room::copy(const Room& other)
     capacity = other.capacity;
     count = other.count;
     letterCount = other.letterCount;
-    letters = other.letters;
+    //letters = other.letters;
+    //when you copy to letters, you need to copy all letters to the array other
+    letters = new Letter[letterCount];
+    for (int i = 0; i < letterCount; i++) {
+        letters[i] = other.letters[i];
+    }
 
 }
