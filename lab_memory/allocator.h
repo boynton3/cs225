@@ -87,7 +87,6 @@ class Allocator
 
     /** Array of all letters (size 26) */
     Letter* alpha;
-
     /** Array of all rooms */
     Room* rooms;
 

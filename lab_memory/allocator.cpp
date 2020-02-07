@@ -57,9 +57,13 @@ void Allocator::loadRooms(const std::string& file)
     totalCapacity = 0;
     int i = 0;
     while (fileio::areMoreRooms()) {
-        i++; 
+        // This does jack-squat
+        //i++; 
         rooms[i] = fileio::nextRoom();
+        //making access to this memory
+        rooms[i].letters = new Letter[26];
         totalCapacity += rooms[i].capacity;
+        i++;
     }
 }
 
