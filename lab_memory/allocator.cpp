@@ -61,6 +61,7 @@ void Allocator::loadRooms(const std::string& file)
         //i++; 
         rooms[i] = fileio::nextRoom();
         //making access to this memory
+        //idk why it won't accept maxx_letters
         rooms[i].letters = new Letter[26];
         totalCapacity += rooms[i].capacity;
         i++;
