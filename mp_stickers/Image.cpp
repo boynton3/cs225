@@ -162,19 +162,37 @@ using cs225::PNG;
 
     }
     void Image::scale(double factor){
-        resize(factor * width(), factor *height());
-        for (unsigned i = 0; i < width(); i++) {
-            for (unsigned j = 0; j < height(); j++) {
-                cs225::HSLAPixel & pixel = getPixel(i,j);
-                double w = width() * factor;
-                double h = height() * factor;
+        // for larger image, make the new image height/width first
+        //scale it then resize it 
+        double newW =  factor * width();
+        double newH = factor * height();
+
+        PNG newImage = PNG(newW, newH); 
+        
+        //resize(newW, newH);
+        for (unsigned i = 0; i < newW; i++) {
+            for (unsigned j = 0; j < newH; j++) {
+
+                //take over the world
+                double w = i * (width() / newW);
+                double h = j * (height() / newH);
                 // }
                 // else if (factor < 1.0) {
                 //     w = width() * factor;
                 //     h = height() * factor;
                 // }
-                cs225::HSLAPixel & copyPixel = getPixel(w, h);
-                pixel = copyPixel;
+                cs225::HSLAPixel & copyPixel = newImage.getPixel(i, j);
+                cs225::HSLAPixel & pixel = getPixel(w,h);
+                copyPixel = pixel;
+            }
+        }
+        resize(width()*factor, height()*factor);
+        for (unsigned i = 0; i < width(); i++) {
+            for (unsigned j =0; j < height(); j++) {
+                HSLAPixel & newish = newImage.getPixel(i,j);
+                HSLAPixel & copyish = getPixel(i,j);
+
+                copyish = newish;
             }
         }
     }
