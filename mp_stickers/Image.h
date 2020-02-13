@@ -26,10 +26,10 @@ class Image : public cs225::PNG {
     void scale(unsigned w, unsigned h);
 
     //set up default constructor and etc bs
-    Image();
-    ~Image();
-    Image(const Image &other);
-    Image const & operator=(Image const & other);
-    Image(unsigned width, unsigned height);
+    // Image();
+    // ~Image();
+    // Image(const Image &other);
+    // Image const & operator=(Image const & other);
+    // Image(unsigned width, unsigned height);
 
 };
