@@ -23,5 +23,5 @@ class Flower : public Drawable
     Flower(const Vector2& center);
     void draw(cs225::PNG* canvas) const;
     //need destructor
-    ~Flower();
+    virtual ~Flower();
 };
