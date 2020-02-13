@@ -143,6 +143,14 @@ using cs225::PNG;
         for (unsigned i = 0; i < width(); i++) {
             for (unsigned j = 0; j < height(); j++) {
                 cs225::HSLAPixel & pixel = getPixel(i,j);
+                pixel.h = pixel.h + degrees;
+                if(pixel.h > 360) {
+                    pixel.h = pixel.h - 360;
+                    //need to continue to rotate from 0;
+                }
+                if (pixel.h < 0) {
+                    pixel.h = pixel.h + 360;
+                }
             }
         }
 
