@@ -139,3 +139,19 @@ void Truck::clear()
     delete engine;
 }
 
+//follow flower example
+void Truck::draw(cs225::PNG* canvas) const {
+    //becuase it's a point
+    trailer->draw(canvas);
+    cabin->draw(canvas);
+    window->draw(canvas);
+    engine->draw(canvas);
+    //loop through the number of wheels and 
+    //make a wheels array of i
+    for (int i = 0; i < NUM_WHEELS; i++) {
+        //need to put at every object of the array for the number 
+        //of wheels we loop through
+        wheels[i]->draw(canvas);
+    }
+}
+

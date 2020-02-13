@@ -35,7 +35,8 @@ class Shape : public Drawable
      */
     Shape(const Vector2& center, const cs225::HSLAPixel& color);
 
-    ~Shape()
+    //to fix part 2, you need a virtual destructor
+    virtual ~Shape()
     { /* Nothing */
     }
 
@@ -44,6 +45,9 @@ class Shape : public Drawable
      *
      * @return the area (in pixels) of the Shape
      */
+      
+    //vitual to fix pointers to different area 
+
     virtual int area() const;
 
     /**
@@ -51,6 +55,8 @@ class Shape : public Drawable
      *
      * @return the perimeter (in pixels) of the Shape
      */
+
+    //vitual to fix pointers to different perimeter 
     virtual int perimeter() const;
 
     /**

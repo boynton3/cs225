@@ -33,5 +33,8 @@ class Truck : public Drawable
     Truck& operator=(const Truck& rhs);
     Vector2 center() const;
     void set_center(const Vector2& center);
+    //unimplimented function for draw
+    //need 
+    void draw(cs225::PNG* canvas) const;
 };
 

@@ -14,8 +14,10 @@ using cs225::PNG;
 
 const double PI = 3.141592;
 
+//you need to move circle and make it the correct color 
+//can call shape constuctor in the initialization list
 Circle::Circle(const Vector2& pcenter, const HSLAPixel& pcolor, int pradius)
-    : radius_(pradius)
+    : Shape(pcenter, pcolor), radius_(pradius)
 {
     /* Nothing.  See initialization list. */
 }
