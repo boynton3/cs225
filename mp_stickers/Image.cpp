@@ -146,7 +146,6 @@ using cs225::PNG;
                 pixel.h = pixel.h + degrees;
                 if(pixel.h > 360) {
                     pixel.h = pixel.h - 360;
-                    //need to continue to rotate from 0;
                 }
                 if (pixel.h < 0) {
                     pixel.h = pixel.h + 360;
