@@ -29,7 +29,7 @@ class StickerSheet {
     
     //must be a pointer
     //has a base picture that's put into the sheet
-    Image* picture_;
+    Image * picture_;
     //sticker sheet made of an array of pictures
     Image** sticker_sheet;
 
@@ -43,10 +43,10 @@ class StickerSheet {
     
     unsigned ct_;
     //must be pointers to delete
-    int * x_;
-    int * y_;    
+    unsigned * x_;
+    unsigned * y_;    
 
-    bool* valids_;
+    //bool* valids_;
 
 
 };

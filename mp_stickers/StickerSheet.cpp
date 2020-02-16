@@ -11,8 +11,8 @@ StickerSheet::StickerSheet(const Image &picture, unsigned max) {
     //setting up stickersheet stuff
     ct_ = 0;
     max_ = max;
-    x_ = new int[max];
-    y_ = new int[max];
+    x_ = new unsigned[max];
+    y_ = new unsigned[max];
 
     //valids_ = new bool[max];
 
@@ -20,8 +20,8 @@ StickerSheet::StickerSheet(const Image &picture, unsigned max) {
     picture_ = new Image(picture);
     //need to set initial picture info
     for (unsigned i = 0; i < max_; i ++) {
-        x_[i] = 0;
-        y_[i] = 0;
+        // x_[i] = 0;
+        // y_[i] = 0;
         sticker_sheet[i] = NULL;
     }
 
@@ -42,10 +42,13 @@ StickerSheet::StickerSheet(const StickerSheet &other) {
 
 //done I think
 const StickerSheet & StickerSheet::operator=(const StickerSheet & other) {
+    if (this != &other) {
+         
     //like a copy of a copy
     //delete it first, copy it again, and return it
     _destory();
     _copy(other);
+    }
     return *this;
 
 }
@@ -57,8 +60,8 @@ const StickerSheet & StickerSheet::operator=(const StickerSheet & other) {
 
 void StickerSheet::changeMaxStickers(unsigned max) {
     Image** copyTo = new Image*[max];
-    int* copyX = new int[max];
-    int* copyY = new int[max];
+    unsigned int* copyX = new unsigned int[max];
+    unsigned int* copyY = new unsigned int[max];
 
     //if its smaller, it should be lost
     for (unsigned i = 0; i < max; i++) {
@@ -112,7 +115,7 @@ int StickerSheet::addSticker(Image &sticker, unsigned x, unsigned y) {
 //lets hope this works
 bool StickerSheet::translate(unsigned index, unsigned x, unsigned y) {
     //if the index is invalid, return false, otherwise change the x and y 
-    if (index > max_ || index == 0 || sticker_sheet[index] == NULL) {
+    if (index >= max_ || sticker_sheet[index] == NULL) {
         return false;
     } else {
         x_[index] = x;
@@ -125,6 +128,10 @@ bool StickerSheet::translate(unsigned index, unsigned x, unsigned y) {
 //Might need to fix to check for Null
 void StickerSheet::removeSticker(unsigned index) {
     //might need to null check, who knows
+    if (index > max_ || sticker_sheet[index] == NULL) {
+        return;
+    }
+
     delete sticker_sheet[index];
     sticker_sheet[index] = NULL;
     x_[index] = 0;
@@ -135,7 +142,8 @@ void StickerSheet::removeSticker(unsigned index) {
 //getting there
 Image * StickerSheet::getSticker(unsigned index) {
     //need to check if index is invalid
-    if (index > max_ || sticker_sheet[index] == NULL ) {
+    
+    if (index > max_ || sticker_sheet[index] == NULL) {
         return NULL;
     } 
     return sticker_sheet[index];
@@ -161,18 +169,25 @@ Image StickerSheet::render() const {
             }
         }
     }
-    Image * copyTo = new Image(*picture_);
+    Image *copyTo = new Image(*picture_);
     copyTo->resize(copyX, copyY);
     //you're not done yet dummy
 
-    for (unsigned i = 0; i < ct_; i ++) {
+    for (unsigned i = 0; i < max_; i ++) {
         if (sticker_sheet[i] != NULL) {
-            for (unsigned x = x_[i]; x < sticker_sheet[i]->width(); x++) {
-                for (unsigned y = 0; y < sticker_sheet[i]->height(); y++) {
-                    HSLAPixel & pixel = copyTo->getPixel(x,y);
-                    HSLAPixel & cop = sticker_sheet[i]->getPixel(x - x_[i], y-y_[i]);
-                    if (cop.a !=0) {
-                        pixel = cop;
+            for (unsigned x = 0; x < picture_[i].width(); x++) {
+                for (unsigned y = 0; y < picture_[i].height(); y++) {
+                    HSLAPixel & bas = picture_[i].getPixel(x,y);
+                    HSLAPixel & newP = copyTo[i].getPixel(x,y);
+                }
+            }
+            for (unsigned x = x_[i]; x < x_[i] + sticker_sheet[i]->width(); x++) {
+                for (unsigned y = 0; y < y_[i] + sticker_sheet[i]->height(); y++) {
+                    //HSLAPixel & pixel = copyTo->getPixel(x,y);
+                    HSLAPixel & pix = sticker_sheet[i]->getPixel(x - x_[i], y-y_[i]);
+                    if (pix.a !=0) {
+                        HSLAPixel & cop = copyTo->getPixel(x_[i] + x, y_[i] + y);
+                        cop = pix;
                     }
                 }
             }
@@ -187,11 +202,11 @@ Image StickerSheet::render() const {
 //possible that I royally screwed the pooch on this one
 void StickerSheet::_copy(const StickerSheet& other) {
     max_ = other.max_;
-    ct_ = other.ct_;
+    //ct_ = other.ct_;
     picture_ = new Image(*(other.picture_));
     sticker_sheet = new Image*[max_];
-    x_ = new int [max_];
-    y_ = new int [max_];
+    x_ = new unsigned [max_];
+    y_ = new unsigned [max_];
 
     for (unsigned i = 0; i < max_; i++) {
         if (other.sticker_sheet[i] == NULL) {
@@ -201,6 +216,8 @@ void StickerSheet::_copy(const StickerSheet& other) {
 
         } else {
             sticker_sheet[i] = new Image(*(other.sticker_sheet[i]));
+            x_[i] = other.x_[i];
+            y_[i] = other.y_[i];
         }
 
     }
@@ -209,22 +226,25 @@ void StickerSheet::_copy(const StickerSheet& other) {
 
 //should be done
 void StickerSheet::_destory() {
-    for (unsigned i = 0; i < max_; i ++) {
-        if (sticker_sheet[i] != NULL ) {
+    if (sticker_sheet != NULL) {
+        for (unsigned i = 0; i < max_; i ++) {
             delete sticker_sheet[i];
             sticker_sheet[i] = NULL;
         }
     }
+
     //delete the base picture
     //delete picture_;
     //remove all x and y stuff
+    delete[] sticker_sheet;
+    sticker_sheet = NULL;
+
     delete[] x_;
     x_ = NULL;
     delete[] y_;
     y_ = NULL;
     //remove all stickers
-    delete[] sticker_sheet;
-    sticker_sheet = NULL;
+    
 
 
 }
