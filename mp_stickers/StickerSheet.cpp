@@ -14,13 +14,15 @@ StickerSheet::StickerSheet(const Image &picture, unsigned max) {
     x_ = new int[max];
     y_ = new int[max];
 
+    //valids_ = new bool[max];
+
     //making a new picture to be put into the sheet
     picture_ = new Image(picture);
     //need to set initial picture info
     for (unsigned i = 0; i < max_; i ++) {
         x_[i] = 0;
         y_[i] = 0;
-        sticker_sheet = NULL;
+        sticker_sheet[i] = NULL;
     }
 
 }
@@ -94,7 +96,7 @@ void StickerSheet::changeMaxStickers(unsigned max) {
 //definitley won't work
 int StickerSheet::addSticker(Image &sticker, unsigned x, unsigned y) {
     //if sticker can't be added (the image is full) then return 0
-    if (ct_ == max_ || sticker_sheet == NULL) {
+    if ( sticker_sheet == NULL) {
         return -1;
     }
     //otherwise, adda sticker to the stickersheet so that the top left 
@@ -133,18 +135,21 @@ void StickerSheet::removeSticker(unsigned index) {
 //getting there
 Image * StickerSheet::getSticker(unsigned index) {
     //need to check if index is invalid
-    if (index > max_ || index == 0 ) {
+    if (index > max_ || sticker_sheet[index] == NULL ) {
         return NULL;
     } 
     return sticker_sheet[index];
 }
 
 Image StickerSheet::render() const {
-    Image copyTo;
+
     unsigned copyX = picture_->width();
     unsigned copyY = picture_->height();
-    for (unsigned i = 0; i < ct_; i ++) {
+
+    for (unsigned i = 0; i < max_; i ++) {
+        // std::cout << "hi" << std::endl;
         if (sticker_sheet[i] != NULL) {
+            // std::cout << "ho" << std::endl;
             unsigned x = x_[i] + sticker_sheet[i]->width();
             unsigned y = y_[i] + sticker_sheet[i]->height();
 
@@ -156,8 +161,27 @@ Image StickerSheet::render() const {
             }
         }
     }
-    copyTo.resize(copyX, copyY);
-    return copyTo;
+    Image * copyTo = new Image(*picture_);
+    copyTo->resize(copyX, copyY);
+    //you're not done yet dummy
+
+    for (unsigned i = 0; i < ct_; i ++) {
+        if (sticker_sheet[i] != NULL) {
+            for (unsigned x = x_[i]; x < sticker_sheet[i]->width(); x++) {
+                for (unsigned y = 0; y < sticker_sheet[i]->height(); y++) {
+                    HSLAPixel & pixel = copyTo->getPixel(x,y);
+                    HSLAPixel & cop = sticker_sheet[i]->getPixel(x - x_[i], y-y_[i]);
+                    if (cop.a !=0) {
+                        pixel = cop;
+                    }
+                }
+            }
+        }
+    }
+    
+    Image toReturn = *copyTo;
+    delete copyTo;
+    return toReturn;
 }
 //HELP ME
 //possible that I royally screwed the pooch on this one

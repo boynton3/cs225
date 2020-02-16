@@ -46,5 +46,7 @@ class StickerSheet {
     int * x_;
     int * y_;    
 
+    bool* valids_;
+
 
 };
