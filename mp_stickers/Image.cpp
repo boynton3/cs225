@@ -7,6 +7,11 @@ using cs225::HSLAPixel;
 using cs225::PNG;
 
 //namespace cs225 {
+
+    //sneaky bogus constructors
+    Image::Image(){};
+    Image::Image(unsigned width, unsigned height) : cs225::PNG(width, height){};
+    I
     //note: Can't just check if less than 0
     //if given value of 0.1, it will be out of range
     void Image::lighten() {

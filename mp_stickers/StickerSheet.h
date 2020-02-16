@@ -21,7 +21,7 @@ class StickerSheet {
     int addSticker(Image &sticker, unsigned x, unsigned y);
     bool translate(unsigned index, unsigned x, unsigned y);
     void removeSticker(unsigned index);
-    Image * getSticker(unsigned index);
+    Image * getSticker(unsigned index) const;
     Image render() const;
 
     //following potd9
@@ -29,7 +29,7 @@ class StickerSheet {
     
     //must be a pointer
     //has a base picture that's put into the sheet
-    Image * picture_;
+    Image picture_;
     //sticker sheet made of an array of pictures
     Image** sticker_sheet;
 
@@ -41,7 +41,7 @@ class StickerSheet {
 
     unsigned max_;
     
-    unsigned ct_;
+    
     //must be pointers to delete
     unsigned * x_;
     unsigned * y_;    
