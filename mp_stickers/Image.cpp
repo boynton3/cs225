@@ -9,9 +9,10 @@ using cs225::PNG;
 //namespace cs225 {
 
     //sneaky bogus constructors
-    Image::Image(){};
-    Image::Image(unsigned width, unsigned height) : cs225::PNG(width, height){};
-    I
+    Image::Image() : cs225::PNG() {};
+    Image::Image(unsigned int width, unsigned int height) : cs225::PNG(width, height){};
+    Image::Image(Image const & other) : cs225::PNG(other) {};
+
     //note: Can't just check if less than 0
     //if given value of 0.1, it will be out of range
     void Image::lighten() {
@@ -26,7 +27,7 @@ using cs225::PNG;
                     pixel.l = 1.0;
                 }
             }
-            
+
         }
     }
     void Image::lighten(double amount){
@@ -35,13 +36,13 @@ using cs225::PNG;
                 cs225::HSLAPixel & pixel = getPixel(i,j);
                 if (pixel.l < 1.0) {
                     pixel.l = pixel.l + amount;
-                    
+
                 }
                 if (pixel.l > 1.0) {
                     pixel.l = 1.0;
                 }
             }
-        }  
+        }
     }
 
 
@@ -175,12 +176,12 @@ using cs225::PNG;
     }
     void Image::scale(double factor){
         // for larger image, make the new image height/width first
-        //scale it then resize it 
+        //scale it then resize it
         double newW =  factor * width();
         double newH = factor * height();
 
-        PNG newImage = PNG(newW, newH); 
-        
+        PNG newImage = PNG(newW, newH);
+
         //resize(newW, newH);
         for (unsigned i = 0; i < newW; i++) {
             for (unsigned j = 0; j < newH; j++) {
@@ -225,7 +226,3 @@ using cs225::PNG;
             }
         }
     }
-    
-
-
-

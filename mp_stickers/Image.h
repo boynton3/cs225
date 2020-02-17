@@ -12,9 +12,9 @@ using namespace std;
 class Image : public cs225::PNG {
     public:
     Image();
-    Image(unsigned width, unsigned height);
-    Image (Image const &other);
-    
+    Image(unsigned int width, unsigned int height);
+    Image(Image const &other);
+
     void lighten();
     void lighten(double amount);
     void darken();
@@ -33,7 +33,7 @@ class Image : public cs225::PNG {
     // Image();
     // ~Image();
     // Image(const Image &other);
-    // Image const & operator=(Image const & other);
+    //Image const & operator=(Image const & other);
     // Image(unsigned width, unsigned height);
 
 };

@@ -10,10 +10,10 @@ class StickerSheet {
     public:
 
     //constructors/destructors
-    StickerSheet(const Image &picture, unsigned max);
+    StickerSheet(const Image & picture, unsigned max);
     ~StickerSheet();
-    StickerSheet(const StickerSheet &other);
-    
+    StickerSheet(const StickerSheet & other);
+
     //member functions
     const StickerSheet & operator=(const StickerSheet &other);
 
@@ -25,11 +25,11 @@ class StickerSheet {
     Image render() const;
 
     //following potd9
-    //private:
-    
+    private:
+
     //must be a pointer
     //has a base picture that's put into the sheet
-    Image picture_;
+    Image* picture_;
     //sticker sheet made of an array of pictures
     Image** sticker_sheet;
 
@@ -37,14 +37,16 @@ class StickerSheet {
     void _destory();
 
 
-    //int * index_;
 
+    //picture info
     unsigned max_;
-    
-    
+    // unsigned width_;
+    // unsigned height_;
+
+
     //must be pointers to delete
     unsigned * x_;
-    unsigned * y_;    
+    unsigned * y_;
 
     //bool* valids_;
 
