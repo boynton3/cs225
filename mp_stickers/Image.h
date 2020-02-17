@@ -12,8 +12,8 @@ using namespace std;
 class Image : public cs225::PNG {
     public:
     Image();
-    Image(unsigned int width, unsigned int height);
-    Image(Image const &other);
+    Image(unsigned width, unsigned height);
+    //Image(Image const &other);
 
     void lighten();
     void lighten(double amount);

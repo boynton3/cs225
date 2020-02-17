@@ -10,8 +10,8 @@ using cs225::PNG;
 
     //sneaky bogus constructors
     Image::Image() : cs225::PNG() {};
-    Image::Image(unsigned int width, unsigned int height) : cs225::PNG(width, height){};
-    Image::Image(Image const & other) : cs225::PNG(other) {};
+    Image::Image(unsigned width, unsigned height) : cs225::PNG(width, height){};
+    //Image::Image(Image const & other) : cs225::PNG(other) {};
 
     //note: Can't just check if less than 0
     //if given value of 0.1, it will be out of range
@@ -175,6 +175,7 @@ using cs225::PNG;
 
     }
     void Image::scale(double factor){
+    
         // for larger image, make the new image height/width first
         //scale it then resize it
         double newW =  factor * width();
@@ -211,18 +212,29 @@ using cs225::PNG;
     }
 
     void Image::scale(unsigned w, unsigned h){
-        for (unsigned i = 0; i < width(); i++) {
-            for (unsigned j = 0; j < height(); j++) {
-                //cs225::HSLAPixel & pixel = getPixel(i,j);
-                double ratio_width = w / width();
-                double ratio_height = h / height();
-                int max = 100;
-                double scaledw = ratio_width * width();
-                double scaledh = ratio_height * height();
-                if (scaledh || scaledw > max) {
-                    scaledw = scaledw / 2;
-                    scaledh = scaledh / 2;
-                }
-            }
-        }
+        double width_ = w / width();
+        double height_ = h / height();
+        //  double factor = width_ / width(); 
+         if (height_ < width_) {
+             scale(height_);
+         } else {
+             scale(width_);
+         }
     }
+
+        //  }
+         
+        // for (unsigned i = 0; i < width(); i++) {
+        //     for (unsigned j = 0; j < height(); j++) {
+        //         //cs225::HSLAPixel & pixel = getPixel(i,j);
+        //         unsigned ratio_width = w / width();
+        //         unsigned ratio_height = h / height();
+        //         unsigned max = 100;
+        //         unsigned scaledw = ratio_width * width();
+        //         unsigned scaledh = ratio_height * height();
+        //         if (scaledh || scaledw > max) {
+        //             scaledw = scaledw / 2;
+        //             scaledh = scaledh / 2;
+        //         }
+        //     }
+        
