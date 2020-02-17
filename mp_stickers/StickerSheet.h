@@ -41,8 +41,8 @@ class StickerSheet {
     //picture info
     unsigned ct_;
     unsigned max_;
-    unsigned width_;
-    unsigned height_;
+    //unsigned width_;
+    //unsigned height_;
 
 
     //must be pointers to delete

@@ -16,8 +16,8 @@ StickerSheet::StickerSheet(const Image &picture, unsigned max) {
 
     ct_ = 0;
 
-    width_ = picture.width();
-    height_ = picture.height();
+    //width_ = picture.width();
+    //height_ = picture.height();
 
     //making a new picture to be put into the sheet
     picture_ = picture;
@@ -66,13 +66,14 @@ void StickerSheet::changeMaxStickers(unsigned max) {
     if (max == max_) {
         return;
     }
-    if (max < max_) {
-        for (unsigned i = max; i < max_; i++) {
-            if (sticker_sheet[i] != NULL) {
-                return;
-            }
-        }
-    }
+
+    // if (max < max_) {
+    //     for (unsigned i = max; i < max_; i++) {
+    //         if (sticker_sheet[i] != NULL) {
+    //             return;
+    //         }
+    //     }
+    // }
 
     Image** copyTo = new Image*[max];
     unsigned * copyX = new unsigned  [max];
@@ -85,20 +86,34 @@ void StickerSheet::changeMaxStickers(unsigned max) {
 
     // }
     if (max_ < max) {
-        for (unsigned i = max_; i < max; i ++) {
+        for (unsigned i = 0; i < max_; i ++) {
+            copyTo[i] = sticker_sheet[i];
+            copyX[i] = x_[i];
+            copyY[i] = y_[i];
+            
+        }
+        for (unsigned i = max_; i < max; i++) {
             copyTo[i] = NULL;
             copyX[i]=0;
             copyY[i] = 0;
         }
+        // for (unsigned i = max; i < max; i++) {
+        //     delete sticker_sheet[i];
+        
+        // }
+        max_ = max;
     } else {
-        for (unsigned i =0; i < max; i++) {
+        for (unsigned i = 0; i < max; i++) {
             copyTo[i] = sticker_sheet[i];
             copyX[i] = x_[i];
             copyY[i] = y_[i];
         }
+        for (unsigned i = max; i < max; i++) {
+            delete sticker_sheet[i];
+        }
 
     }
-    _destory();
+    delete[] sticker_sheet;
     sticker_sheet = copyTo;
     x_ = copyX;
     y_ = copyY;
@@ -172,7 +187,7 @@ Image * StickerSheet::getSticker(unsigned index) const {
 }
 
 Image StickerSheet::render() const {
-    Image output;
+    
 
     unsigned w = picture_.width();
     unsigned h = picture_.height();
@@ -181,66 +196,58 @@ Image StickerSheet::render() const {
          //std::cout << "a" << std::endl;
         if (sticker_sheet[i] != NULL) {
              //std::cout << "b" << std::endl;
-            w = std::max((int)sticker_sheet[i]->width()+x_[i],w);
-            h = std::max((int)sticker_sheet[i]->width()+y_[i],h);
+            
+            unsigned testx = sticker_sheet[i]->width()+x_[i];
+            unsigned testy = sticker_sheet[i]->width()+y_[i];
+
+            if (testx >= w) {
+                w = testx;
+            }
+            if (testy >= h) {
+                h = testy;
+            }
         }
     }
-    // if (w ==0 || h == 0) {
-    //     return picture_;
-    // }
     
-    output.resize(w, h);
+    //std::cout << " c" << std:: endl;
+    Image * output = new Image(picture_);
+    output->resize(w,h);
 
     // for (unsigned i = 0; i < max_; i++) {
     //     if (sticker_sheet[i] != NULL) {
-    for (unsigned x = 0; x < w; x++) {
-    for (unsigned y = 0; y < h; y++) {
-        HSLAPixel & pix = output.getPixel(x,y);
-        pix = picture_.getPixel(x,y);
-    }
+    for (unsigned x = 0; x < picture_.width(); x++) {
+        //std::cout << " d" << std:: endl;
+
+        for (unsigned y = 0; y < picture_.height(); y++) {
+                //std::cout << " e" << std:: endl;
+
+            HSLAPixel & pix = output->getPixel(x,y);
+            HSLAPixel  bas = picture_.getPixel(x,y);
+            pix = bas;
+        }
     }
     for (unsigned i = 0; i < max_; i ++) {
         if (sticker_sheet[i] != NULL) {
             for (unsigned x = 0; x < sticker_sheet[i]->width(); x++) {
                 for (unsigned y = 0; y < sticker_sheet[i]->height(); y++) {
                     //HSLAPixel & pixel = copyTo->getPixel(x,y);
-                HSLAPixel & pix = sticker_sheet[i]->getPixel(x, y);
-                if (pix.a !=0) {
-                    HSLAPixel & cop = output.getPixel(x_[i] + x, y_[i] + y);
-                    cop.h = pix.h;
-                    cop.l = pix.l;
-                    cop.s = pix.s;
-                    cop.a = pix.a;
+                    HSLAPixel & pix = sticker_sheet[i]->getPixel(x, y);
+                    if (pix.a !=0) {
+                        HSLAPixel & cop = output->getPixel(x_[i] + x, y_[i] + y);
+                        cop.h = pix.h;
+                        cop.l = pix.l;
+                        cop.s = pix.s;
+                        cop.a = pix.a;
+                    }
                 }
             }
         }
     }
-    }
-    return output;
+    Image toReturn = *output;
+    return toReturn;
 
 }
 
-//     unsigned w_ = 0;
-//     unsigned h_ = 0;
-//     for (unsigned i = 0; i < max_; i++) {
-//         if (sticker_sheet[i] != nullptr) {
-//         w_ = (x_[i] + sticker_sheet[i]->width() > picture_.width()) ? x_[i] + sticker_sheet[i]->width() : picture_->width();
-//         h_ = (y_[i] + sticker_sheet[i]->height() > picture_->height()) ? y_[i] + sticker_sheet[i]->height() : picture_->height();
-//         }
-//     }
-
-//     if (w_ == 0 || h_ == 0) {
-//         return *picture_;
-//     }
-
-//     Image outPut(w_, h_);
-
-//     for (unsigned x = 0; x < w_; x++) {
-//         for (unsigned y = 0; y < h_; y++) {
-//             HSLAPixel & pixel = outPut.getPixel(x, y);
-//             pixel = picture_->getPixel(x, y);
-//         }
-//     }
 
 //     for (unsigned i = 0; i < max_; i++) {
 //     if (sticker_sheet[i] != nullptr) {
@@ -348,12 +355,12 @@ void StickerSheet::_copy(const StickerSheet& other) {
 }
 //should be done
 void StickerSheet::_destory() {
-    // if (sticker_sheet != NULL) {
-    //      for (unsigned i = 0; i < max_; i ++) {
-    //          delete sticker_sheet[i];
-    //          sticker_sheet[i] = NULL;
-    //      }
-    // }
+    if (sticker_sheet != NULL) {
+         for (unsigned i = 0; i < max_; i ++) {
+             delete sticker_sheet[i];
+             sticker_sheet[i] = NULL;
+         }
+    }
 
     //delete the base picture
     //delete picture_;
