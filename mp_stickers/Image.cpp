@@ -212,6 +212,7 @@ using cs225::PNG;
     }
 
     void Image::scale(unsigned w, unsigned h){
+        //fixed it you diphead
         double width_ = w / width();
         double height_ = h / height();
         //  double factor = width_ / width(); 

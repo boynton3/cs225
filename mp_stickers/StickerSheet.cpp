@@ -63,54 +63,36 @@ const StickerSheet & StickerSheet::operator=(const StickerSheet & other) {
 //number of stickers, the stickers with indices above max - 1 will be lost.
 
 void StickerSheet::changeMaxStickers(unsigned max) {
-    if (max == max_) {
-        return;
+    if (max < max_) {
+        for (unsigned i = max; i < max_; i++) {
+            if (sticker_sheet[i] != NULL) {
+                return;
+            }
+        }
     }
 
     Image** copyTo = new Image*[max];
     unsigned * copyX = new unsigned  [max];
     unsigned  * copyY = new unsigned  [max];
 
-    //if its smaller, it should be lost
-    for (unsigned i = 0; i < max; i++) {
-        copyTo[i] = NULL;
-
-    }
-    if (max < max_) {
-    for (unsigned i = 0; i < max; i++) {
-        //if it's not NULL, and less than the size of the imput image
-        //if (sticker_sheet[i] != NULL && i < max) {
+    for (unsigned i =0; i < max; i++) {
         copyTo[i] = sticker_sheet[i];
-                 std::cout << "a" << std::endl;
-
         copyX[i] = x_[i];
-                 std::cout << "b" << std::endl;
-
         copyY[i] = y_[i];
-    }
-    }
-        // } else
-        // //might need to be >=
-        // if (sticker_sheet[i] !=NULL && i >max) {
-        //     delete[] copyTo;
-        //     delete[] copyX;
-        //     delete[] copyY;
-        //     copyTo[i] = NULL;
-        // }
-    if (max > max_) {
-        for (unsigned i = max_; i <max; i++) {
-                     std::cout << "c" << std::endl;
 
+    }
+    if (max_ < max) {
+        for (unsigned i = max_; i < max; i ++) {
             copyTo[i] = NULL;
-                     std::cout << "d" << std::endl;
-
+            copyX[i]=0;
+            copyY[i] = 0;
         }
     }
     _destory();
     sticker_sheet = copyTo;
     x_ = copyX;
     y_ = copyY;
-
+    max_ = max;
 }
 
 //definitley won't work
