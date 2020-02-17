@@ -63,6 +63,9 @@ const StickerSheet & StickerSheet::operator=(const StickerSheet & other) {
 //number of stickers, the stickers with indices above max - 1 will be lost.
 
 void StickerSheet::changeMaxStickers(unsigned max) {
+    if (max == max_) {
+        return;
+    }
     if (max < max_) {
         for (unsigned i = max; i < max_; i++) {
             if (sticker_sheet[i] != NULL) {
@@ -75,18 +78,25 @@ void StickerSheet::changeMaxStickers(unsigned max) {
     unsigned * copyX = new unsigned  [max];
     unsigned  * copyY = new unsigned  [max];
 
-    for (unsigned i =0; i < max; i++) {
-        copyTo[i] = sticker_sheet[i];
-        copyX[i] = x_[i];
-        copyY[i] = y_[i];
+    // for (unsigned i =0; i < max; i++) {
+    //     copyTo[i] = sticker_sheet[i];
+    //     copyX[i] = x_[i];
+    //     copyY[i] = y_[i];
 
-    }
+    // }
     if (max_ < max) {
         for (unsigned i = max_; i < max; i ++) {
             copyTo[i] = NULL;
             copyX[i]=0;
             copyY[i] = 0;
         }
+    } else {
+        for (unsigned i =0; i < max; i++) {
+            copyTo[i] = sticker_sheet[i];
+            copyX[i] = x_[i];
+            copyY[i] = y_[i];
+        }
+
     }
     _destory();
     sticker_sheet = copyTo;
