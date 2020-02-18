@@ -67,24 +67,10 @@ void StickerSheet::changeMaxStickers(unsigned max) {
         return;
     }
 
-    // if (max < max_) {
-    //     for (unsigned i = max; i < max_; i++) {
-    //         if (sticker_sheet[i] != NULL) {
-    //             return;
-    //         }
-    //     }
-    // }
-
     Image** copyTo = new Image*[max];
     unsigned * copyX = new unsigned  [max];
     unsigned  * copyY = new unsigned  [max];
 
-    // for (unsigned i =0; i < max; i++) {
-    //     copyTo[i] = sticker_sheet[i];
-    //     copyX[i] = x_[i];
-    //     copyY[i] = y_[i];
-
-    // }
     if (max_ < max) {
         for (unsigned i = 0; i < max_; i ++) {
             copyTo[i] = sticker_sheet[i];
@@ -122,7 +108,7 @@ void StickerSheet::changeMaxStickers(unsigned max) {
 
 //definitley won't work
 int StickerSheet::addSticker(Image &sticker, unsigned x, unsigned y) {
-    //if sticker can't be added (the image is full) then return 0
+    //if sticker can't be added (the image is full) then return -1
     // if ( sticker_sheet == NULL) {
     //     return -1;
     // }
@@ -187,8 +173,13 @@ Image * StickerSheet::getSticker(unsigned index) const {
 }
 
 Image StickerSheet::render() const {
-    
 
+    unsigned origW = picture_.width();
+    unsigned origH = picture_.height();
+
+    // std::cout << "Originial Width:" << origW << std::endl;
+    // std::cout << "Original Height" << origH << std::endl;
+ 
     unsigned w = picture_.width();
     unsigned h = picture_.height();
 
@@ -198,7 +189,7 @@ Image StickerSheet::render() const {
              //std::cout << "b" << std::endl;
             
             unsigned testx = sticker_sheet[i]->width()+x_[i];
-            unsigned testy = sticker_sheet[i]->width()+y_[i];
+            unsigned testy = sticker_sheet[i]->height()+y_[i];
 
             if (testx >= w) {
                 w = testx;
@@ -208,126 +199,53 @@ Image StickerSheet::render() const {
             }
         }
     }
+
+    // std::cout << "New image width: " << w << std::endl;
+    // std::cout << "New image height: " << h << std::endl;
     
     //std::cout << " c" << std:: endl;
-    Image * output = new Image(picture_);
-    output->resize(w,h);
+    Image output(w,h);
 
-    // for (unsigned i = 0; i < max_; i++) {
-    //     if (sticker_sheet[i] != NULL) {
-    for (unsigned x = 0; x < picture_.width(); x++) {
-        //std::cout << " d" << std:: endl;
+    
 
-        for (unsigned y = 0; y < picture_.height(); y++) {
-                //std::cout << " e" << std:: endl;
-
-            HSLAPixel & pix = output->getPixel(x,y);
-            HSLAPixel  bas = picture_.getPixel(x,y);
-            pix = bas;
+    for (unsigned x = 0; x < origW; x++) {
+        for (unsigned y = 0; y < origH; y++) {
+            HSLAPixel & pix = output.getPixel(x,y);
+            pix = picture_.getPixel(x,y);
         }
     }
-    for (unsigned i = 0; i < max_; i ++) {
+
+    for (unsigned i = 0; i < max_; i++) {
         if (sticker_sheet[i] != NULL) {
-            for (unsigned x = 0; x < sticker_sheet[i]->width(); x++) {
-                for (unsigned y = 0; y < sticker_sheet[i]->height(); y++) {
-                    //HSLAPixel & pixel = copyTo->getPixel(x,y);
-                    HSLAPixel & pix = sticker_sheet[i]->getPixel(x, y);
-                    if (pix.a !=0) {
-                        HSLAPixel & cop = output->getPixel(x_[i] + x, y_[i] + y);
-                        cop.h = pix.h;
-                        cop.l = pix.l;
-                        cop.s = pix.s;
-                        cop.a = pix.a;
+            
+            // Image &ref = *sticker_sheet[i];
+            // unsigned maxWidth = ref.width();
+            // unsigned maxHeight = ref.height();
+
+            for (unsigned x = x_[i]; x < x_[i] + sticker_sheet[i]-> width(); x++) {
+        //std::cout << " d" << std:: endl;
+
+                for (unsigned y = y_[i]; y < y_[i] + sticker_sheet[i]->height(); y++) {
+                //std::cout << " e" << std:: endl;
+
+                    HSLAPixel & pix = output.getPixel(x,y);
+                    //std::cout << " e" << std:: endl;
+                    HSLAPixel &  bas = sticker_sheet[i] -> getPixel(x - x_[i], y - y_[i]);
+                    //std::cout << " f" << std:: endl;
+                    if (bas.a != 0) {
+                        pix = bas;
                     }
                 }
             }
         }
     }
-    Image toReturn = *output;
-    return toReturn;
+
+    return output;
 
 }
 
 
-//     for (unsigned i = 0; i < max_; i++) {
-//     if (sticker_sheet[i] != nullptr) {
-//       for (unsigned x = 0; x < sticker_sheet[i]->width(); x++) {
-//         for (unsigned y = 0; y < sticker_sheet[i]->height(); y++) {
-//           HSLAPixel & basePixel = outPut.getPixel(x_[i] + x, y_[i] + y);
-//           HSLAPixel & stickerPixel = sticker_sheet[i]->getPixel(x, y);
-//           if (stickerPixel.a != 0) {
-//             basePixel = stickerPixel;
-//           }
-//         }
-//       }
-//     }
-//   }
-//   return outPut;
-// }
-
-
-
-    //need a way to access picture width() and length()
-
-
-//     unsigned maxX = width_;
-//     unsigned maxY = height_;
-
-//     for (unsigned i = 0; i < max_; i ++) {
-//         // std::cout << "hi" << std::endl;
-//         if (sticker_sheet[i] != NULL) {
-//             // std::cout << "ho" << std::endl;
-//             unsigned x = x_[i] + sticker_sheet[i]->width();
-//             unsigned y = y_[i] + sticker_sheet[i]->height();
-
-//             if (x > maxX) {
-//                 maxX = x;
-//             }
-//             if (y > maxY) {
-//                 maxY = y;
-//             }
-//         }
-//     }
-//     Image copyTo = Image(maxX, maxY);
-//     //copyTo->resize(copyX, copyY);
-//     //you're not done yet dummy
-
-//     for (unsigned i = 0; i < max_; i ++) {
-//         for (unsigned x = 0; x < picture_->width(); x++) {
-//             for (unsigned y = 0; y < picture_->height(); y++) {
-//                 HSLAPixel & bas = picture_->getPixel(x,y);
-//                 HSLAPixel & newP = copyTo.getPixel(x,y);
-//                 newP.h = bas.h;
-//                 newP.l = bas.l;
-//                 newP.s = bas.s;
-//                 newP.a = bas.a;
-//             }
-//         }
-//         if (ct_ == 0) {
-//             return copyTo;
-//         }
-//         for (unsigned x = 0; x < sticker_sheet[i]->width(); x++) {
-//             if (sticker_sheet[i] != NULL) {
-//             for (unsigned y = 0; y < sticker_sheet[i]->height(); y++) {
-//                 //HSLAPixel & pixel = copyTo->getPixel(x,y);
-//                 HSLAPixel & pix = sticker_sheet[i]->getPixel(x, y);
-//                 if (pix.a !=0) {
-//                     HSLAPixel & cop = copyTo.getPixel(x_[i] + x, y_[i] + y);
-//                     cop.h = pix.h;
-//                     cop.l = pix.l;
-//                     cop.s = pix.s;
-//                     cop.a = pix.a;
-//                 }
-//                 }
-//             }
-//         }
-//     }
-//     return copyTo;
-
-// }
-
-
-//HELP ME
+//HELP ME (functions)
 //possible that I royally screwed the pooch on this one
 void StickerSheet::_copy(const StickerSheet& other) {
     //picture_ = other.picture_;
@@ -353,7 +271,7 @@ void StickerSheet::_copy(const StickerSheet& other) {
     }
 
 }
-//should be done
+//should be donevalgr
 void StickerSheet::_destory() {
     if (sticker_sheet != NULL) {
          for (unsigned i = 0; i < max_; i ++) {
