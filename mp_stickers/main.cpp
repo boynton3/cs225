@@ -25,8 +25,8 @@ int main() {
 
 
   sheeting->addSticker(stars, 200, 75);
-  sheeting->addSticker(saturn, 950,0);
-  sheeting->addSticker(rocket, 50, 500);
+  sheeting->addSticker(saturn, 600,0);
+  sheeting->addSticker(rocket, 50, 300);
   
 
 

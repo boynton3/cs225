@@ -39,7 +39,7 @@ class StickerSheet {
 
 
     //picture info
-    unsigned ct_;
+    //unsigned ct_;
     unsigned max_;
     //unsigned width_;
     //unsigned height_;

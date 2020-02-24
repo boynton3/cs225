@@ -29,9 +29,18 @@ namespace QuackFun {
 template <typename T>
 T sum(stack<T>& s)
 {
+    if (!s.empty()) {
+        T out = s.top();
+        s.pop();
+        T curr = (out + sum(s));
+        s.push(out);
+        return curr;
+    } else {
+        return T();
+    }
 
     // Your code here
-    return T(); // stub return value (0 for primitive types). Change this!
+    //return T(); // stub return value (0 for primitive types). Change this!
                 // Note: T() is the default value for objects, and 0 for
                 // primitive types
 }
@@ -55,9 +64,50 @@ T sum(stack<T>& s)
  */
 bool isBalanced(queue<char> input)
 {
+    stack<char> brack;
+
+    if (input.empty()) {
+        return true;
+    }
+//have to use '' for pointers
+    while(!input.empty()){
+        if (input.front() == ']') {
+            brack.push(input.front());
+        }
+        if (input.front() == '[') {
+            brack.push(input.front());
+        }
+        input.pop();
+
+    }
+
+    int shut = 0;
+
+    while(!brack.empty()) {
+        if (brack.top() == '[') {
+            if (shut ==0) {
+                return false;
+            }
+            shut--;
+        }
+
+        if (brack.top() == ']') {
+            shut++;
+        }
+        
+        brack.pop();
+
+    }
+
+    if (shut == 0) {
+        return true;
+    }
+    return false;
+
+    // if ()
 
     // @TODO: Make less optimistic
-    return true;
+    //return true;
 }
 
 /**
@@ -79,8 +129,57 @@ template <typename T>
 void scramble(queue<T>& q)
 {
     stack<T> s;
-    // optional: queue<T> q2;
+    queue<T> q2;
 
     // Your code here
+    // int block = 0;
+    // int last = 0;
+    unsigned ct = 1;
+
+    // //unsigned 
+
+    // while (length < q.size()) {
+    //     if (last == block) {
+    //         ++block;
+    //         last = 0;
+    //     }
+    //     else {
+    //         ++last;
+    //     }
+    //     ++length;
+    // }
+    
+    // ++block;
+    
+    while (!q.empty()) {
+        if ((ct % 2) == 0){
+            if (q.size() < ct) {
+                ct = q.size();
+            }
+            for (unsigned k = 0; k < ct; ++k) {
+                s.push(q.front());
+                q.pop();
+
+            }
+            for (unsigned k = 0; k < ct; ++k) {
+                q2.push(s.top());
+                s.pop();
+            }
+        }
+        else {
+            if (q.size() < ct) {
+                ct = q.size();
+            }
+            for (unsigned k = 0; k < ct; ++k) {
+                q2.push(q.front());
+                q.pop();
+            }
+        }
+        ct++;
+    
+        }
+
+        q = q2;
+    }
 }
-}
+
