@@ -17,7 +17,7 @@ List<T>::List() {
 template <typename T>
 typename List<T>::ListIterator List<T>::begin() const {
   // @TODO: graded in MP3.1
-  return List<T>::ListIterator(NULL);
+  return List<T>::ListIterator(head_);
 }
 
 /**
@@ -36,7 +36,15 @@ typename List<T>::ListIterator List<T>::end() const {
  */
 template <typename T>
 void List<T>::_destroy() {
-  /// @todo Graded in MP3.1
+  // @todo Graded in MP3.1
+  ListNode * old;
+  while (head_ != NULL) {
+    old = head_-> next;
+    delete head_;
+    head_ = old;
+  }
+  length_ = 0;
+  
 }
 
 /**
@@ -48,22 +56,41 @@ void List<T>::_destroy() {
 template <typename T>
 void List<T>::insertFront(T const & ndata) {
   /// @todo Graded in MP3.1
-  ListNode * newNode = head_;
-  head_ = new ListNode(ndata);
-  //head_->next = newNode;
-  
-  if (head_ != NULL) {
-    
+  ListNode * newNode = new ListNode(ndata);
+  newNode-> next = head_;
+  newNode-> prev = NULL;
+
+  if (head_ == NULL) {
+    head_ = newNode;
+    tail_ = newNode;
+    length_ = 1;
+  } else {
     head_ -> prev = newNode;
-    //head_ = newNode;
-  }
-  if (tail_ == NULL) {
-    tail_ = head_;
+    head_ = newNode;
+    length_++;
+    
   }
   
 
-  length_++;
+  // length_++;
   newNode = NULL;
+
+  // if (head_ != NULL) {
+  //   ListNode * newNode = new ListNode(ndata);
+  //   newNode->next = head_;
+  //   head_->prev = newNode;
+  //   head_ = newNode;
+  //   length_++;
+  //   newNode->prev = NULL;
+  // } else {
+  //   ListNode * newNode = new ListNode(ndata);
+  //   head_ = newNode;
+  //   tail_ = newNode;
+
+  //   length_ = 1;
+
+
+  // }
 }
 
 /**
@@ -76,27 +103,29 @@ template <typename T>
 void List<T>::insertBack(const T & ndata) {
   /// @todo Graded in MP3.1
 
-  ListNode * newNode = tail_;
-  tail_ = new ListNode(ndata);
- // ListNode * last = new ListNode(ndata);
-  //tail_ -> prev= newNode;
-  //newNode -> next = NULL;
-
-  if (tail_ == NULL) {
-    tail_ = newNode;
-    head_ = tail_;
-  }
+  ListNode * newNode = new ListNode(ndata);
+  newNode->prev = tail_;
+  newNode->next = NULL;
 
   if (tail_ != NULL) {
-  
-    tail_->prev = newNode;
-    //tail_ = newNode;
-  } 
-  if (head_ == NULL) {
-    head_ = newNode;
-  }
+    newNode->prev = tail_;
+    tail_->next = newNode;
+    tail_ = newNode;
+    
     length_++;
     newNode = NULL;
+  
+    //tail_ = newNode;
+  } else {
+    head_ = newNode;
+    tail_ = newNode;
+    length_ = 1;
+  }
+  // if (head_ == NULL) {
+  //   head_ = newNode;
+  // }
+  //   length_++;
+  //   newNode = NULL;
 
 }
 
