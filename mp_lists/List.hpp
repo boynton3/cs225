@@ -146,6 +146,38 @@ typename List<T>::ListNode * List<T>::split(ListNode * start, int splitPoint) {
   return curr;
 }
 
+//THIS WAS NOT FRIGGEN INCLUDED AND I HAVE TO DO IT MYSELF
+//FROM THE DOCUMENTATION
+// template <typename T>
+// List<T> List<T>::split(int splitPoint) {
+//   if (splitPoint == 0) {
+//     return List<T>();
+//   }
+
+//   ListNode * curr = split(head_, splitPoint);
+//   //if list is empty
+//   if (curr == head_) {
+//     head_ = NULL;
+//     tail_ = NULL;
+//     length_ = 0;
+//   } else {
+//     while (head_ -> next != NULL) {
+//       head = head->next;
+//       length_ = splitPoint;
+//     }
+
+//     List<T> copy;
+//     copy.head_ = curr;
+//     copy.tail_ = curr;
+
+//     if (copy.tail_ != NULL) {
+//       while 
+//     }
+//   }
+
+// }	
+
+
 /**
   * Modifies List using the rules for a TripleRotate.
   *

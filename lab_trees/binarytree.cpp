@@ -79,6 +79,18 @@ void BinaryTree<T>::printLeftToRight(const Node* subRoot) const
 void BinaryTree<T>::mirror()
 {
     //your code here
+    //these all start with a NULL test so lets start there
+    //struct Node* subroot = (struct *Node)malloc(sizeof)
+    
+    if (this->root == NULL) {
+        return;
+    }
+    Node * temp = this->root->left;
+    this->root->left = this->root->right;
+    this->root->right = temp;
+
+    mirror(this->root->left);
+    mirror(this->root->right);
 }
 
 
