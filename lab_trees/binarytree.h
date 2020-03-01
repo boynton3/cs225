@@ -121,6 +121,7 @@ class BinaryTree
          */
         void mirror();
 
+        
         /**
          * isOrdered() function iterative version
          * @return True if an in-order traversal of the tree would produce a
@@ -157,6 +158,8 @@ class BinaryTree
          * Look at the private helpers for height and printLeftToRight
          *  as examples.
          */
+        //private helper functons:
+        void mirror(Node * subRoot);
 
         /**
          * Private helper function for the public height function.

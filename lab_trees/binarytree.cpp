@@ -75,22 +75,26 @@ void BinaryTree<T>::printLeftToRight(const Node* subRoot) const
  * Flips the tree over a vertical axis, modifying the tree itself
  *  (not creating a flipped copy).
  */
-    template <typename T>
-void BinaryTree<T>::mirror()
+template <typename T>
+void BinaryTree<T>::mirror() {
+    mirror(root);
+}
+template <typename T>
+void BinaryTree<T>::mirror(Node * subRoot)
 {
     //your code here
     //these all start with a NULL test so lets start there
     //struct Node* subroot = (struct *Node)malloc(sizeof)
     
-    if (this->root == NULL) {
+    if (subRoot == NULL) {
         return;
     }
-    Node * temp = this->root->left;
-    this->root->left = this->root->right;
-    this->root->right = temp;
+    Node * temp = subRoot->left;
+    subRoot->left = subRoot->right;
+    subRoot->right = temp;
 
-    mirror(this->root->left);
-    mirror(this->root->right);
+    mirror(subRoot->left);
+    mirror(subRoot->right);
 }
 
 
