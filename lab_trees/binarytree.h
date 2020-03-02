@@ -161,6 +161,8 @@ class BinaryTree
         //private helper functons:
         void mirror(Node * subRoot);
         bool isOrderedRecursive(Node* subRoot) const;
+        T maxVal(Node* subRoot) const;
+        T minVal(Node* subRoot) const;
 
         /**
          * Private helper function for the public height function.
