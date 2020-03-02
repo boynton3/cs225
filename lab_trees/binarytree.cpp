@@ -110,14 +110,14 @@ bool BinaryTree<T>::isOrderedIterative() const
 {
     // your code here
     InorderTraversal<T> trav(root);
-    T previous = (*trav.begin())->elem;
+    T element = (*trav.begin())->elem;
     for (typename TreeTraversal<int>::Iterator iterate = trav.begin(); iterate != trav.end(); ++iterate) {
-        if ((*iterate)->elem >= previous) {
-            return true;
+        if ((*iterate)->elem < element) {
+            return false;
         }
-        previous = (*iterate)->elem;
+        element = (*iterate)->elem;
     }
-    return false;
+    return true;
 }
 
 /**
@@ -129,24 +129,28 @@ bool BinaryTree<T>::isOrderedIterative() const
 template <typename T>
 bool BinaryTree<T>::isOrderedRecursive() const
 {
+    
     return isOrderedRecursive(root);
 
 }
+
 template <typename T>
 bool BinaryTree<T>::isOrderedRecursive(Node* subRoot) const
 {
-    // your code here
-    typename BinaryTree<T>::Node * curr = subRoot;
-    if (curr->left == NULL && curr->right == NULL) {
+    if (subRoot == NULL || (subRoot->left == NULL && subRoot->right == NULL)) {
         return true;
     }
-    if(curr->right == NULL) {
-        return (curr->left->elem < curr->elem && isOrderedRecursive(curr->left));
+    // // your code here
+    // unsigned rightest = 0;
+    // unsigned leftest = ;
+    
+    if (subRoot->right == NULL) {
+        return (subRoot->left->elem < subRoot->elem && isOrderedRecursive(subRoot->left));
     }
-    if (curr->left == NULL) {
-        return (curr->right->elem > curr->elem && isOrderedRecursive(curr->right));
+    if (subRoot->left == NULL) {
+        return (subRoot->right->elem > subRoot->elem && isOrderedRecursive(subRoot->right));
     }
-    return (curr->right->elem && curr->left->elem && isOrderedRecursive(curr->left) && isOrderedRecursive(curr->right));
-    return false;
+    return (subRoot->right->elem > subRoot->elem && subRoot->left->elem < subRoot->elem && isOrderedRecursive(subRoot->left) && isOrderedRecursive(subRoot->right));
+    //return false;
 }
 
