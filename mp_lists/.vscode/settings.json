@@ -1,0 +1,9 @@
+{
+    "files.associations": {
+        "*.cpp": "cpp",
+        "type_traits": "cpp",
+        "memory": "cpp",
+        "regex": "cpp",
+        "utility": "cpp"
+    }
+}
