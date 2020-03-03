@@ -75,11 +75,34 @@ void BinaryTree<T>::printLeftToRight(const Node* subRoot) const
  *  (not creating a flipped copy).
  */
 template <typename T>
+<<<<<<< HEAD
 void BinaryTree<T>::mirror()
 {
     //your code here
     mirrorhelp(root);
 
+=======
+void BinaryTree<T>::mirror() {
+    mirror(root);
+}
+
+template <typename T>
+void BinaryTree<T>::mirror(Node * subRoot)
+{
+    //your code here
+    //these all start with a NULL test so lets start there
+    //struct Node* subroot = (struct *Node)malloc(sizeof)
+    
+    if (subRoot == NULL) {
+        return;
+    }
+    Node * temp = subRoot->left;
+    subRoot->left = subRoot->right;
+    subRoot->right = temp;
+
+    mirror(subRoot->left);
+    mirror(subRoot->right);
+>>>>>>> 9f41ed2504f5396df761b5bbbd4058b7bcd3ea1e
 }
 template<typename T>
 void BinaryTree<T>::mirrorhelp(Node* subroot){
@@ -102,11 +125,23 @@ template <typename T>
 bool BinaryTree<T>::isOrderedIterative() const
 {
     // your code here
+<<<<<<< HEAD
   Node *temp = root;
 while (temp->left !=NULL) {
   temp = temp->left;
 }
   return isOrderedIterative(root, temp->elem);
+=======
+    InorderTraversal<T> trav(root);
+    T element = (*trav.begin())->elem;
+    for (typename TreeTraversal<int>::Iterator iterate = trav.begin(); iterate != trav.end(); ++iterate) {
+        if ((*iterate)->elem < element) {
+            return false;
+        }
+        element = (*iterate)->elem;
+    }
+    return true;
+>>>>>>> 9f41ed2504f5396df761b5bbbd4058b7bcd3ea1e
 }
 
 template <typename T>
@@ -129,6 +164,7 @@ bool BinaryTree<T>::isOrderedIterative(Node* root,T data) const{
 template <typename T>
 bool BinaryTree<T>::isOrderedRecursive() const
 {
+<<<<<<< HEAD
 
     // your code here
       Node *temp = root;
@@ -226,4 +262,91 @@ int BinaryTree<T>::sumDistances(Node* subroot,int dist)const{
   return sumDistances(subroot->right,dist+1)+sumDistances(subroot->left,dist+1)+dist;
 }
 return 0;
+=======
+    
+    return isOrderedRecursive(root);
+
+}
+
+template <typename T>
+bool BinaryTree<T>::isOrderedRecursive(Node* subRoot) const
+{
+    
+    if (subRoot == NULL) {
+        return true;
+    }
+    if (subRoot->left != NULL && maxVal(subRoot->left) > subRoot->elem) {
+        return false;
+    }
+    if (subRoot->right != NULL && minVal(subRoot->right) < subRoot->elem) {
+        return false;
+    }
+    if (!isOrderedRecursive(subRoot->right) || !isOrderedRecursive(subRoot->right)) {
+        return false;
+    }
+    return true;
+    // } else if (subRoot->left == NULL && subRoot->right == NULL) {
+    //     return true;
+    // } else if (subRoot->left == NULL && subRoot->elem <= subRoot->right->elem) {
+    //     return isOrderedRecursive(subRoot->right);
+    // } else if (subRoot->right == NULL && subRoot->elem >= subRoot->left->elem) {
+    //     return isOrderedRecursive(subRoot->left);
+    // } else if (subRoot->elem <= subRoot->right->elem && subRoot->elem >= subRoot->left->elem) {
+    //     return isOrderedRecursive(subRoot->left) && isOrderedRecursive(subRoot->right);
+    // }
+    // return false;
+    // // your code here
+    // unsigned rightest = 0;
+    // unsigned leftest = ;
+    
+    // if (subRoot->right == NULL) {
+    //     return (subRoot->left->elem < subRoot->elem && isOrderedRecursive(subRoot->left));
+    // }
+    // if (subRoot->left == NULL) {
+    //     return (subRoot->right->elem > subRoot->elem && isOrderedRecursive(subRoot->right));
+    // }
+    // return (subRoot->right->elem > subRoot->elem && subRoot->left->elem < subRoot->elem && isOrderedRecursive(subRoot->left) && isOrderedRecursive(subRoot->right));
+    // //return false;
+}
+template <typename T>
+T BinaryTree<T>::maxVal(Node* subRoot) const {    
+    T max = subRoot->elem;
+    if (subRoot->left == NULL & subRoot->right == NULL) {
+        return max;
+    }
+    if (subRoot->right != NULL) {
+        T temp = maxVal(subRoot->right);
+        if (temp > max) {
+            max = temp;
+        }
+    }
+    if (subRoot->left != NULL) {
+        T temp = maxVal(subRoot->left);
+        if (temp > max) {
+            max = temp;
+        }
+    }
+    return max;
+}
+
+template <typename T>
+T BinaryTree<T>::minVal(Node* subRoot) const {
+    T min = subRoot->elem;
+    if (subRoot->left == NULL & subRoot->right == NULL) {
+        return min;
+    }
+    if (subRoot->right != NULL) {
+        T temp = minVal(subRoot->right);
+        if (temp < min) {
+            min = temp;
+        }
+    }
+    if (subRoot->left != NULL) {
+        T temp = maxVal(subRoot->left);
+        if (temp < min) {
+            min = temp;
+        }
+    }
+    return min;
+>>>>>>> 9f41ed2504f5396df761b5bbbd4058b7bcd3ea1e
 }
