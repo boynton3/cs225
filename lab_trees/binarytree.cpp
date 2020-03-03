@@ -5,7 +5,6 @@
  */
 #include "TreeTraversals/InorderTraversal.h"
 #include <iostream>
-
 /**
  * @return The height of the binary tree. Recall that the height of a binary
  *  tree is just the length of the longest path from the root to a leaf, and
@@ -31,7 +30,7 @@ int BinaryTree<T>::height(const Node* subRoot) const
         return -1;
 
     // Recursive definition
-    return 1 + std::max(height(subRoot->left), height(subRoot->right));
+    return 1 + max(height(subRoot->left), height(subRoot->right));
 }
 
 /**
@@ -47,7 +46,7 @@ void BinaryTree<T>::printLeftToRight() const
     printLeftToRight(root);
 
     // Finish the line
-    std::cout << std::endl;
+    cout << endl;
 }
 
 /**
@@ -65,7 +64,7 @@ void BinaryTree<T>::printLeftToRight(const Node* subRoot) const
     printLeftToRight(subRoot->left);
 
     // Print this node
-    std::cout << subRoot->elem << ' ';
+    cout << subRoot->elem << ' ';
 
     // Print right subtree
     printLeftToRight(subRoot->right);
@@ -75,24 +74,23 @@ void BinaryTree<T>::printLeftToRight(const Node* subRoot) const
  * Flips the tree over a vertical axis, modifying the tree itself
  *  (not creating a flipped copy).
  */
-    template <typename T>
+template <typename T>
 void BinaryTree<T>::mirror()
 {
     //your code here
-    //these all start with a NULL test so lets start there
-    //struct Node* subroot = (struct *Node)malloc(sizeof)
-    
-    if (this->root == NULL) {
-        return;
-    }
-    Node * temp = this->root->left;
-    this->root->left = this->root->right;
-    this->root->right = temp;
+    mirrorhelp(root);
 
-    mirror(this->root->left);
-    mirror(this->root->right);
 }
-
+template<typename T>
+void BinaryTree<T>::mirrorhelp(Node* subroot){
+    if (subroot != NULL){
+        mirrorhelp(subroot->left);
+        mirrorhelp(subroot->right);
+        Node* temp = subroot->left;
+        subroot->left = subroot->right;
+        subroot->right = temp;
+    }
+}
 
 /**
  * isOrdered() function iterative version
@@ -104,9 +102,24 @@ template <typename T>
 bool BinaryTree<T>::isOrderedIterative() const
 {
     // your code here
-    return false;
+  Node *temp = root;
+while (temp->left !=NULL) {
+  temp = temp->left;
+}
+  return isOrderedIterative(root, temp->elem);
 }
 
+template <typename T>
+bool BinaryTree<T>::isOrderedIterative(Node* root,T data) const{
+        if(root == NULL) return true;
+        bool ordered = true;
+        if (data > root->elem) ordered = false;
+        ordered = ordered && isOrderedIterative(root->left, data);
+        data=root->elem;
+        ordered = ordered && isOrderedIterative(root->right, data);
+
+       return ordered;
+}
 /**
  * isOrdered() function recursive version
  * @return True if an in-order traversal of the tree would produce a
@@ -116,7 +129,101 @@ bool BinaryTree<T>::isOrderedIterative() const
 template <typename T>
 bool BinaryTree<T>::isOrderedRecursive() const
 {
+
     // your code here
-    return false;
+      Node *temp = root;
+while (temp->left !=NULL) {
+  temp = temp->left;
+}
+  return isOrderedIterative(root, temp->elem);
 }
 
+/**
+ * creates vectors of all the possible paths from the root of the tree to any leaf
+ * node and adds it to another vector.
+ * Path is, all sequences starting at the root node and continuing
+ * downwards, ending at a leaf node. Paths ending in a left node should be
+ * added before paths ending in a node further to the right.
+ * @param paths vector of vectors that contains path of nodes
+ */
+template <typename T>
+void BinaryTree<T>::printPaths(vector<vector<T> > &paths) const
+{
+    stack<typename BinaryTree<T>::Node*> stack;
+    typename BinaryTree<T>::Node* temp = root;
+
+    vector<T> first;
+    pushLeftInVectorandStack(first, stack, temp);
+    paths.push_back(first);
+    int i = 0;
+
+    while (!stack.empty()) {
+        while (!stack.empty() && stack.top()->right == NULL) {
+        //    cout<<(stack.top())->elem<<endl;
+            stack.pop();
+        }
+        if(stack.empty()) {
+            break;
+        }
+        // first node has right child
+        temp = stack.top();
+        //cout<<i<<endl;
+        vector<T> next;
+        for (typename std::vector<T>::iterator it = paths[i].begin() ; it != paths[i].end() && *it != temp->elem; ++it){
+            next.push_back(*it);
+        }
+        next.push_back(temp->elem);
+        //avoid infinite loop
+        //cout<<i<<endl;
+        stack.pop();
+        // push back right child tree
+        typename BinaryTree<T>::Node* rightTree = temp->right;
+        pushLeftInVectorandStack(next, stack, rightTree);
+        paths.push_back(next);
+        i++;
+        //cout<<i<<endl;
+        
+    }
+}
+template <typename T>
+void pushLeftInVectorandStack(vector<T> &v, stack<typename BinaryTree<T>::Node*> &s, typename BinaryTree<T>::Node*& subroot) {
+    if (subroot != NULL) {
+        while(subroot->left != NULL){
+            s.push(subroot);
+            v.push_back(subroot->elem);
+            subroot = subroot->left;
+        }
+        if (subroot != NULL) {
+            s.push(subroot);
+            v.push_back(subroot->elem);
+            if(subroot->right != NULL){
+                s.pop();
+                pushLeftInVectorandStack(v, s, subroot->right);
+            }
+        }
+       
+    }
+    
+}
+
+/**
+ * Each node in a tree has a distance from the root node - the depth of that
+ * node, or the number of edges along the path from that node to the root. This
+ * function returns the sum of the distances of all nodes to the root node (the
+ * sum of the depths of all the nodes). Your solution should take O(n) time,
+ * where n is the number of nodes in the tree.
+ * @return The sum of the distances of all nodes to the root
+ */
+template <typename T>
+int BinaryTree<T>::sumDistances() const
+{
+    // your code here
+    return sumDistances(root,0);
+}
+template <typename T>
+int BinaryTree<T>::sumDistances(Node* subroot,int dist)const{
+  if (subroot!=NULL){
+  return sumDistances(subroot->right,dist+1)+sumDistances(subroot->left,dist+1)+dist;
+}
+return 0;
+}

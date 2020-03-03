@@ -133,49 +133,31 @@ typename List<T>::ListNode * List<T>::split(ListNode * start, int splitPoint) {
   }
 
   ListNode * curr = start;
-  for (int i = 0; i < splitPoint || curr != NULL; i++) {
-    curr = curr->next;
+
+  
+
+  for (int i = 0; i < splitPoint; i++) {
+    //need to check if we can even do this
+    if (curr->next == NULL) {
+      break;
+    } else {
+      curr = curr->next;
+    }
   }
 
   //might remove the second part
-  if (curr != NULL && curr->prev != NULL) {
+  if (curr != NULL) {
       curr->prev->next = NULL;
       curr->prev = NULL;
+
+     
+      return curr;
   }
 
-  return curr;
+  return NULL;
 }
 
-//THIS WAS NOT FRIGGEN INCLUDED AND I HAVE TO DO IT MYSELF
-//FROM THE DOCUMENTATION
-// template <typename T>
-// List<T> List<T>::split(int splitPoint) {
-//   if (splitPoint == 0) {
-//     return List<T>();
-//   }
 
-//   ListNode * curr = split(head_, splitPoint);
-//   //if list is empty
-//   if (curr == head_) {
-//     head_ = NULL;
-//     tail_ = NULL;
-//     length_ = 0;
-//   } else {
-//     while (head_ -> next != NULL) {
-//       head = head->next;
-//       length_ = splitPoint;
-//     }
-
-//     List<T> copy;
-//     copy.head_ = curr;
-//     copy.tail_ = curr;
-
-//     if (copy.tail_ != NULL) {
-//       while 
-//     }
-//   }
-
-// }	
 
 
 /**
@@ -191,6 +173,41 @@ typename List<T>::ListNode * List<T>::split(ListNode * start, int splitPoint) {
 template <typename T>
 void List<T>::tripleRotate() {
   // @todo Graded in MP3.1
+  //take 3 elements at a time and flip them
+  //then go to the next three and flip em
+  //if there are less than three elements
+  //just dont do it
+
+  //ListNode* ending = head_;
+
+  int triple = 3;
+  while (triple - 1 <= length_) {
+    ListNode* begining = head_;
+
+
+    //flip the nodes
+    ListNode * first = begining;
+    ListNode * second = first->next;
+    ListNode * third = second->next;
+
+    begining = third->next;
+
+    //then flip the data
+    ListNode * temp = first;
+
+    first = second;
+    second = third;
+    third = temp;
+
+
+    //begining = third->next;
+    triple = triple + 3;
+
+
+  }
+
+
+
 }
 
 /**
@@ -215,6 +232,20 @@ void List<T>::reverse() {
 template <typename T>
 void List<T>::reverse(ListNode *& startPoint, ListNode *& endPoint) {
   /// @todo Graded in MP3.2
+  // if (startPoint == NULL || endPoint == NULL) {
+  //   return;
+  // }
+
+
+  // ListNode * begining = startPoint;
+  // ListNode * ending = endPoint;
+  // startPoint = endPoint;
+
+  // endPoint = begining;
+
+  
+
+
 }
 
 /**
