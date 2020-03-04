@@ -259,16 +259,45 @@ void List<T>::reverse() {
 template <typename T>
 void List<T>::reverse(ListNode *& startPoint, ListNode *& endPoint) {
   /// @todo Graded in MP3.2
-  // if (startPoint == NULL || endPoint == NULL) {
-  //   return;
-  // }
+  if (startPoint == NULL || endPoint == NULL) {
+    return;
+  }
 
+  ListNode * temp = NULL;
+  ListNode * begining = startPoint;
+  ListNode * ending = endPoint;
+  startPoint = endPoint;
+  endPoint = begining;
 
-  // ListNode * begining = startPoint;
-  // ListNode * ending = endPoint;
-  // startPoint = endPoint;
+  while (ending != NULL) {
+    temp = begining;
+    begining = begining->next;
+    temp->next = temp->prev;
+    temp->prev = begining;
 
-  // endPoint = begining;
+  }
+
+  if (endPoint == head_) {
+    head_ = startPoint;
+  }
+  if (startPoint == tail_) {
+    tail_ = endPoint;
+  }
+
+  if (endPoint->next == NULL) {
+    startPoint->prev = NULL;
+  } else {
+    endPoint->next->next = startPoint;
+    startPoint->prev = endPoint->next;
+  }
+
+  if (begining != NULL) {
+    endPoint->next = begining;
+    begining->prev = endPoint;
+  }
+  if (begining == NULL) {
+    endPoint->next = NULL;
+  }
 
   
 
@@ -284,6 +313,26 @@ void List<T>::reverse(ListNode *& startPoint, ListNode *& endPoint) {
 template <typename T>
 void List<T>::reverseNth(int n) {
   /// @todo Graded in MP3.2
+  ListNode * begining = head_;
+  ListNode * ending = head_;
+
+  while (ending != NULL) {
+    //while i is still less than the size we want
+    for (int i = 0; i < n; i++) {
+      //keep going through unil there is nothing after the 
+      //end so long we are still within the size
+      if (ending->next != NULL) {
+        ending = ending->next;
+      } else {
+        break;
+      }
+      //make this shit recursive so
+      //I don't have to do as much
+      reverse(begining, ending);
+      ending = begining;
+      begining = ending->next;
+    }
+  }
 }
 
 
