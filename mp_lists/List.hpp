@@ -398,43 +398,78 @@ template <typename T>
 typename List<T>::ListNode * List<T>::merge(ListNode * first, ListNode* second) {
   /// @todo Graded in MP3.2
 
-  if (first == NULL) {
-      return second;
-  } else if (second == NULL) {
-      return first;
-  }
-  
+  //example from https://algorithms.tutorialhorizon.com/merge-sort-in-a-linked-list/
+
   ListNode * temp = NULL;
 
-  if (first->data > second->data) {
-    temp = second;
-    second = second->next
-  } else {
-    temp = first;
-    temp->next = merge(first->next, second);
+  //we can't edit them directly
+  //we have to modify pointers to them!!
+  ListNode * one = first;
+  ListNode * two = second;
+
+  if (first == NULL && second == NULL) {
+    return NULL;
   }
 
-  while (first != NULL && second != NULL) {
-
-  }
-
-  // ListNode * sorted = NULL;
-
-  // while (temp->next != NULL) {
+  if (first == NULL) {
+      return second;
+  } 
   
-  //   if (first->data <= second->data) {
-  //     temp = temp->next;
-  //     //return temp;
-  //   } else {
-  //     temp = temp->next->next;
-  //     //return temp;
-  //   }
-  //   return temp;
-  // }
+  if (second == NULL) {
+      return first;
+  }
 
-  // //temp->next = second;
-  // return NULL;
 
+
+  //you can't compare > 
+  //you have to compare < for some reason
+
+  //these sort the head cases
+  if (two-> data < one->data) {
+    temp = two;
+    two = two->next;
+  } else {
+    temp = one;
+    one = one->next;
+  }
+
+  //right now, temp is that smaller list
+  //we need if first is NULL
+  //if second is NULL
+  ///if first < second
+  //is second < first
+
+  while (one !=NULL || two != NULL) {
+    if (two == NULL) {
+      temp->next = one;
+      one->prev = temp;
+
+      temp = temp->next;
+      one = one->next;
+    } else if ((one != NULL) && (one->data < two->data)) {
+      temp->next = one;
+      one->prev = temp;
+
+      temp = temp->next;
+      one = one->next;
+
+    } else {
+      temp->next = two;
+      two->prev = temp;
+
+      temp = temp->next;
+      two = two->next;
+      //std::cout << "printing" << std::endl;
+    }
+  }
+  
+  //return based on the head cases
+  if ((first->data) < (second->data)) {
+    return first;
+  } else {
+    return second;
+  }
+  return NULL;
 }
 
 /**
@@ -457,6 +492,7 @@ typename List<T>::ListNode* List<T>::mergesort(ListNode * start, int chainLength
   if (chainLength == 1) {
     return start;
   }
+  return NULL;
 
 
 }
