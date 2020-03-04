@@ -263,40 +263,55 @@ void List<T>::reverse(ListNode *& startPoint, ListNode *& endPoint) {
     return;
   }
 
-  ListNode * temp = NULL;
+  ListNode * curr = NULL;
+
   ListNode * begining = startPoint;
   ListNode * ending = endPoint;
+
+  //flip em around first and then change the ones in between
   startPoint = endPoint;
   endPoint = begining;
 
 
   //as long as the current is not the end
-  while (temp != ending) {
+  while (curr != ending) {
     //set the start
-    temp = begining;
+    curr = begining;
     //the new start point is the next node
     begining = begining->next;
     
-    temp->next = temp->prev;
-    temp->prev = begining;
+    curr->next = curr->prev;
+    curr->prev = begining;
 
   }
 
+  //these check if the list only has 1 node
+  //in wich case they'll both be the start/end
+  // if the endPoint is the start of the list
+  //make the head_ the startPoint too
   if (endPoint == head_) {
     head_ = startPoint;
   }
   
+  //if the startPoint is the end of the list
+  //make the tail_ the endPint too
   if (startPoint == tail_) {
     tail_ = endPoint;
   }
 
+  //now we have to flip it back
+  
+  //if there is only one element
   if (endPoint->next == NULL) {
     startPoint->prev = NULL;
   } else {
+    //else there are multple elements
+    //and we flip them back
     endPoint->next->next = startPoint;
     startPoint->prev = endPoint->next;
   }
 
+  //flip it on over for the start
   if (begining != NULL) {
     endPoint->next = begining;
     begining->prev = endPoint;
@@ -336,6 +351,7 @@ void List<T>::reverseNth(int n) {
       //make this shit recursive so
       //I don't have to do as much
       reverse(begining, ending);
+      //you have to change begining FIRST
       begining = ending->next;
       ending = begining;
     
