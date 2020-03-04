@@ -419,13 +419,11 @@ typename List<T>::ListNode * List<T>::merge(ListNode * first, ListNode* second) 
       return first;
   }
 
-
-
   //you can't compare > 
   //you have to compare < for some reason
 
   //these sort the head cases
-  if (two-> data < one->data) {
+  if (two -> data < one->data) {
     temp = two;
     two = two->next;
   } else {
@@ -440,13 +438,9 @@ typename List<T>::ListNode * List<T>::merge(ListNode * first, ListNode* second) 
   //is second < first
 
   while (one !=NULL || two != NULL) {
-    if (two == NULL) {
-      temp->next = one;
-      one->prev = temp;
-
-      temp = temp->next;
-      one = one->next;
-    } else if ((one != NULL) && (one->data < two->data)) {
+    //if second is NUll
+    //if first < second
+    if ((one != NULL && one->data < two->data) || two == NULL) {
       temp->next = one;
       one->prev = temp;
 
@@ -454,6 +448,8 @@ typename List<T>::ListNode * List<T>::merge(ListNode * first, ListNode* second) 
       one = one->next;
 
     } else {
+      //if first is NULL
+      //or if second < first
       temp->next = two;
       two->prev = temp;
 
@@ -487,12 +483,29 @@ template <typename T>
 typename List<T>::ListNode* List<T>::mergesort(ListNode * start, int chainLength) {
   /// @todo Graded in MP3.2
   if (chainLength == 0) {
-    return NULL;
+    return start;
   }
   if (chainLength == 1) {
     return start;
   }
-  return NULL;
+  if (start == NULL) {
+    return NULL;
+  }
 
+  int first = chainLength/2;
+  int second = chainLength - first;
+
+  //split it
+  ListNode * list = split(start, first);
+  
+  //make sense of the lists
+  //make this sh*t recursive
+  list = mergesort(list, second);
+  start = mergesort(start, first);
+
+  //merge them back together
+  //use your stupid helper function
+  //even though it doesn't help, all it does is hurt me
+  return merge(list, start);
 
 }
