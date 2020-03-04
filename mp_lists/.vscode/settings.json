@@ -4,6 +4,8 @@
         "type_traits": "cpp",
         "memory": "cpp",
         "regex": "cpp",
-        "utility": "cpp"
+        "utility": "cpp",
+        "__locale": "cpp",
+        "string": "cpp"
     }
 }

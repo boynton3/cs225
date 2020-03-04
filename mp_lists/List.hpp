@@ -177,31 +177,58 @@ void List<T>::tripleRotate() {
   //then go to the next three and flip em
   //if there are less than three elements
   //just dont do it
+  if (this->length_ < 3) {
+    return;
+  }
 
-  //ListNode* ending = head_;
+  ListNode * first = head_;
+  ListNode * second = first->next;
+  ListNode * third = second->next;
+  ListNode * temp;
+  
 
-  int triple = 3;
-  while (triple - 1 <= length_) {
-    ListNode* begining = head_;
+  int triple = length_;
+  int ct = 0;
+
+  while (triple >= 3) {
+
+    if (triple > 3) {
+      //sets the header of the next three elemenets
+      third->next->prev = first;
+    }
+
+    
+    temp = first->prev;
+    first->next = third->next;
+    third->next = first;
+    first->prev = third;
+    second->prev = temp;
+
+    if (triple == length_) {
+      head_ = second;
+    }
+
+    if (triple == 3) {
+      tail_ = first;
+    }   
+   
+    if (ct > 0) {
+      second->prev->next = second;
+    }
 
 
-    //flip the nodes
-    ListNode * first = begining;
-    ListNode * second = first->next;
-    ListNode * third = second->next;
 
-    begining = third->next;
-
-    //then flip the data
-    ListNode * temp = first;
-
-    first = second;
-    second = third;
-    third = temp;
+    first = first->next;
+    if (first == NULL) {
+      return;
+    }
+    second = first->next;
+    third = second->next;
 
 
-    //begining = third->next;
-    triple = triple + 3;
+    triple = triple - 3;
+    ct++;
+    
 
 
   }
