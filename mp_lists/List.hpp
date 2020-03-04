@@ -437,6 +437,8 @@ typename List<T>::ListNode * List<T>::merge(ListNode * first, ListNode* second) 
   ///if first < second
   //is second < first
 
+
+  //Do NOT touch this
   while (one !=NULL || two != NULL) {
     //if second is NUll
     //if first < second
@@ -459,12 +461,14 @@ typename List<T>::ListNode * List<T>::merge(ListNode * first, ListNode* second) 
     }
   }
   
-  //return based on the head cases
+  //return based on the information AFTER we switch everything
   if ((first->data) < (second->data)) {
     return first;
   } else {
     return second;
   }
+
+  //otherwise we're f*cked
   return NULL;
 }
 
@@ -482,6 +486,8 @@ typename List<T>::ListNode * List<T>::merge(ListNode * first, ListNode* second) 
 template <typename T>
 typename List<T>::ListNode* List<T>::mergesort(ListNode * start, int chainLength) {
   /// @todo Graded in MP3.2
+
+  //base cases
   if (chainLength == 0) {
     return start;
   }
@@ -492,20 +498,35 @@ typename List<T>::ListNode* List<T>::mergesort(ListNode * start, int chainLength
     return NULL;
   }
 
-  int first = chainLength/2;
+  //first half and then the second half
+  int n = chainLength/2;
+  int first = chainLength - n;
   int second = chainLength - first;
 
   //split it
-  ListNode * list = split(start, first);
+  //these are the two split and more manageble parts
+  ListNode * listL = mergesort(start, first);
+  ListNode * splitting = split(start, n);
   
   //make sense of the lists
   //make this sh*t recursive
-  list = mergesort(list, second);
-  start = mergesort(start, first);
+  
+  //what if the length is an odd chain length dingus
+  //sort them
+  //ListNode * listL = mergesort(start, first);
+  ListNode * listR = mergesort(splitting, second);
+  
 
   //merge them back together
   //use your stupid helper function
   //even though it doesn't help, all it does is hurt me
-  return merge(list, start);
+  //merge them
+  return merge(listL, listR);
 
 }
+
+//ARE YOU FRIGGEN KIDDING ME
+//HOW WAS I SUPPOSE TO SEE THIS??
+
+//okay you lucky, 5 minutes, one function, go
+
