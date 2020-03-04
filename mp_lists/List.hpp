@@ -306,7 +306,7 @@ void List<T>::reverse(ListNode *& startPoint, ListNode *& endPoint) {
     startPoint->prev = NULL;
   } else {
     //else there are multple elements
-    //and we flip them back
+    //and we flip them back from that point
     endPoint->next->next = startPoint;
     startPoint->prev = endPoint->next;
   }
@@ -397,7 +397,44 @@ void List<T>::mergeWith(List<T> & otherList) {
 template <typename T>
 typename List<T>::ListNode * List<T>::merge(ListNode * first, ListNode* second) {
   /// @todo Graded in MP3.2
-  return NULL;
+
+  if (first == NULL) {
+      return second;
+  } else if (second == NULL) {
+      return first;
+  }
+  
+  ListNode * temp = NULL;
+
+  if (first->data > second->data) {
+    temp = second;
+    second = second->next
+  } else {
+    temp = first;
+    temp->next = merge(first->next, second);
+  }
+
+  while (first != NULL && second != NULL) {
+
+  }
+
+  // ListNode * sorted = NULL;
+
+  // while (temp->next != NULL) {
+  
+  //   if (first->data <= second->data) {
+  //     temp = temp->next;
+  //     //return temp;
+  //   } else {
+  //     temp = temp->next->next;
+  //     //return temp;
+  //   }
+  //   return temp;
+  // }
+
+  // //temp->next = second;
+  // return NULL;
+
 }
 
 /**
@@ -414,5 +451,12 @@ typename List<T>::ListNode * List<T>::merge(ListNode * first, ListNode* second) 
 template <typename T>
 typename List<T>::ListNode* List<T>::mergesort(ListNode * start, int chainLength) {
   /// @todo Graded in MP3.2
-  return NULL;
+  if (chainLength == 0) {
+    return NULL;
+  }
+  if (chainLength == 1) {
+    return start;
+  }
+
+
 }
