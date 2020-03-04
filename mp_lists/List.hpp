@@ -269,9 +269,14 @@ void List<T>::reverse(ListNode *& startPoint, ListNode *& endPoint) {
   startPoint = endPoint;
   endPoint = begining;
 
-  while (ending != NULL) {
+
+  //as long as the current is not the end
+  while (temp != ending) {
+    //set the start
     temp = begining;
+    //the new start point is the next node
     begining = begining->next;
+    
     temp->next = temp->prev;
     temp->prev = begining;
 
@@ -280,6 +285,7 @@ void List<T>::reverse(ListNode *& startPoint, ListNode *& endPoint) {
   if (endPoint == head_) {
     head_ = startPoint;
   }
+  
   if (startPoint == tail_) {
     tail_ = endPoint;
   }
@@ -318,7 +324,7 @@ void List<T>::reverseNth(int n) {
 
   while (ending != NULL) {
     //while i is still less than the size we want
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < n-1; i++) {
       //keep going through unil there is nothing after the 
       //end so long we are still within the size
       if (ending->next != NULL) {
@@ -326,12 +332,13 @@ void List<T>::reverseNth(int n) {
       } else {
         break;
       }
+    }
       //make this shit recursive so
       //I don't have to do as much
       reverse(begining, ending);
-      ending = begining;
       begining = ending->next;
-    }
+      ending = begining;
+    
   }
 }
 
