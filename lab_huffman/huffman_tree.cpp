@@ -83,6 +83,39 @@ HuffmanTree::removeSmallest(queue<TreeNode*>& singleQueue,
      * smaller of the two queues heads is the smallest item in either of
      * the queues. Return this item after removing it from its queue.
      */
+    if (singleQueue.empty() && mergeQueue.empty()) {
+        return NULL;
+    }
+
+    TreeNode * smallest; 
+
+    if (!(singleQueue.empty()) && mergeQueue.empty()) {
+        smallest = singleQueue.front();
+        singleQueue.pop();
+        return smallest;
+    }
+
+    if (singleQueue.empty() && !(mergeQueue.empty())) {
+        smallest = mergeQueue.front();
+        singleQueue.pop();
+        return smallest;
+    }
+    
+    //since the smallest item in each queue heads the queue
+    //check which queue's front is more frequent
+    //then, if it's more frequent then repeat
+    //the above but for the smallest frequency
+    if (singleQueue.front()->freq < mergeQueue.front()->freq) {
+        smallest = singleQueue.front();
+        singleQueue.pop();
+        return smallest;
+    }
+
+    if (mergeQueue.front()->freq < singleQueue.front()->freq) {
+        smallest = mergeQueue.front();
+        mergeQueue.pop();
+        return smallest;
+    }
     return NULL;
 }
 
@@ -108,6 +141,41 @@ void HuffmanTree::buildTree(const vector<Frequency>& frequencies)
      * Finally, when there is a single node left, it is the root. Assign it
      * to the root and you're done!
      */
+
+    //first need to place all leafodes into singleQueue
+    //in order of frequency
+
+    for (unsigned i = 0; i < frequencies.size(); i++ ) {
+        TreeNode * adding = new TreeNode(frequencies[i]);
+        //frequencies[i].pop();
+        //sike push these to your singleQueue
+        singleQueue.push(adding);
+    }
+
+    //until there is only one node in the two queues 
+    //i.e if singleQueue.size() == 0 && mregQueue.size() == 1
+    //or opposite
+    if (singleQueue.size() == 0 && mergeQueue.size() == 1) {
+
+        //get the left and right leaves
+        TreeNode * smallest = removeSmallest(singleQueue, mergeQueue);
+        TreeNode * smaller = removeSmallest(singleQueue, mergeQueue);
+
+        //create a tree using these leaves
+        TreeNode * sub  = new TreeNode(smallest->freq.getFrequency() + smaller->freq.getFrequency());
+        //need to set left and right
+        sub->left = smallest;
+        sub->right = smaller;
+
+        //send this to the empty tree
+        mergeQueue.push(sub);
+    }
+
+    if (singleQueue.size() == 1 && mergeQueue.size() == 0) {
+        root_ = singleQueue.front();
+    } else {
+        root_ = mergeQueue.front();
+    }
 
 }
 
