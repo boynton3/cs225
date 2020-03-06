@@ -486,13 +486,18 @@ typename List<T>::ListNode * List<T>::merge(ListNode * first, ListNode* second) 
 template <typename T>
 typename List<T>::ListNode* List<T>::mergesort(ListNode * start, int chainLength) {
   /// @todo Graded in MP3.2
-  if (chainLength == 0) {
-    return NULL;
+   if(start==NULL){return NULL;}
+  if(chainLength<=1){return start;}
+  int len = chainLength/2;
+  ListNode * a = start;
+  ListNode * b = split(start, len);
+  if(chainLength%2==1){
+  a=mergesort(a, len);
+  b=mergesort(b, len+1);}
+  else {
+    a=mergesort(a, len);
+    b=mergesort(b, len);
   }
-  if (chainLength == 1) {
-    return start;
-  }
-  return NULL;
 
-
+  return merge(a, b);
 }
