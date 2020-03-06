@@ -419,13 +419,11 @@ typename List<T>::ListNode * List<T>::merge(ListNode * first, ListNode* second) 
       return first;
   }
 
-
-
   //you can't compare > 
   //you have to compare < for some reason
 
   //these sort the head cases
-  if (two-> data < one->data) {
+  if (two -> data < one->data) {
     temp = two;
     two = two->next;
   } else {
@@ -439,14 +437,12 @@ typename List<T>::ListNode * List<T>::merge(ListNode * first, ListNode* second) 
   ///if first < second
   //is second < first
 
-  while (one !=NULL || two != NULL) {
-    if (two == NULL) {
-      temp->next = one;
-      one->prev = temp;
 
-      temp = temp->next;
-      one = one->next;
-    } else if ((one != NULL) && (one->data < two->data)) {
+  //Do NOT touch this
+  while (one !=NULL || two != NULL) {
+    //if second is NUll
+    //if first < second
+    if ((one != NULL && one->data < two->data) || two == NULL) {
       temp->next = one;
       one->prev = temp;
 
@@ -454,6 +450,8 @@ typename List<T>::ListNode * List<T>::merge(ListNode * first, ListNode* second) 
       one = one->next;
 
     } else {
+      //if first is NULL
+      //or if second < first
       temp->next = two;
       two->prev = temp;
 
@@ -463,12 +461,14 @@ typename List<T>::ListNode * List<T>::merge(ListNode * first, ListNode* second) 
     }
   }
   
-  //return based on the head cases
+  //return based on the information AFTER we switch everything
   if ((first->data) < (second->data)) {
     return first;
   } else {
     return second;
   }
+
+  //otherwise we're f*cked
   return NULL;
 }
 
@@ -486,6 +486,7 @@ typename List<T>::ListNode * List<T>::merge(ListNode * first, ListNode* second) 
 template <typename T>
 typename List<T>::ListNode* List<T>::mergesort(ListNode * start, int chainLength) {
   /// @todo Graded in MP3.2
+<<<<<<< HEAD
    if(start==NULL){return NULL;}
   if(chainLength<=1){return start;}
   int len = chainLength/2;
@@ -498,6 +499,50 @@ typename List<T>::ListNode* List<T>::mergesort(ListNode * start, int chainLength
     a=mergesort(a, len);
     b=mergesort(b, len);
   }
+=======
+
+  //base cases
+  if (chainLength == 0) {
+    return start;
+  }
+  if (chainLength == 1) {
+    return start;
+  }
+  if (start == NULL) {
+    return NULL;
+  }
+
+  //first half and then the second half
+  int n = chainLength/2;
+  int first = chainLength - n;
+  int second = chainLength - first;
+
+  //split it
+  //these are the two split and more manageble parts
+  ListNode * listL = mergesort(start, first);
+  ListNode * splitting = split(start, n);
+  
+  //make sense of the lists
+  //make this sh*t recursive
+  
+  //what if the length is an odd chain length dingus
+  //sort them
+  //ListNode * listL = mergesort(start, first);
+  ListNode * listR = mergesort(splitting, second);
+  
+
+  //merge them back together
+  //use your stupid helper function
+  //even though it doesn't help, all it does is hurt me
+  //merge them
+  return merge(listL, listR);
+>>>>>>> 38c047ef0464f396e189473554500a2d0b690d3c
 
   return merge(a, b);
 }
+
+//ARE YOU FRIGGEN KIDDING ME
+//HOW WAS I SUPPOSE TO SEE THIS??
+
+//okay you lucky, 5 minutes, one function, go
+
