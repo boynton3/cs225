@@ -87,7 +87,7 @@ HuffmanTree::removeSmallest(queue<TreeNode*>& singleQueue,
         return NULL;
     }
 
-    TreeNode * smallest; 
+    TreeNode * smallest;
 
     if (!(singleQueue.empty()) && mergeQueue.empty()) {
         smallest = singleQueue.front();
@@ -100,18 +100,18 @@ HuffmanTree::removeSmallest(queue<TreeNode*>& singleQueue,
         singleQueue.pop();
         return smallest;
     }
-    
+
     //since the smallest item in each queue heads the queue
     //check which queue's front is more frequent
     //then, if it's more frequent then repeat
     //the above but for the smallest frequency
-    if (singleQueue.front()->freq < mergeQueue.front()->freq) {
+    if (singleQueue.front()->freq.getFrequency() < mergeQueue.front()->freq.getFrequency()) {
         smallest = singleQueue.front();
         singleQueue.pop();
         return smallest;
     }
 
-    if (mergeQueue.front()->freq < singleQueue.front()->freq) {
+    if (mergeQueue.front()->freq.getFrequency() < singleQueue.front()->freq.getFrequency()) {
         smallest = mergeQueue.front();
         mergeQueue.pop();
         return smallest;
@@ -152,10 +152,10 @@ void HuffmanTree::buildTree(const vector<Frequency>& frequencies)
         singleQueue.push(adding);
     }
 
-    //until there is only one node in the two queues 
+    //until there is only one node in the two queues
     //i.e if singleQueue.size() == 0 && mregQueue.size() == 1
     //or opposite
-    if (singleQueue.size() == 0 && mergeQueue.size() == 1) {
+    if (singleQueue.size() == 0 && mergeQueue.size() == 1 || singleQueue.size() == 1 && mergeQueue.size() == 0) {
 
         //get the left and right leaves
         TreeNode * smallest = removeSmallest(singleQueue, mergeQueue);
@@ -201,6 +201,12 @@ void HuffmanTree::decode(stringstream& ss, BinaryFileReader& bfile)
          * character to the stringstream (with operator<<, just like cout)
          * and start traversing from the root node again.
          */
+         if (bfile.getNextBit()) {
+           current = current->right;
+         } else {
+           current = current -> left;
+         }
+
     }
 }
 
