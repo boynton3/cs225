@@ -11,6 +11,9 @@
 #include <sstream>
 #include <string>
 
+
+using namespace std;
+
 /**
  * The AVLTree class represents a linked-memory AVL Tree.
  * @tparam K the type of key stored in the tree
@@ -124,6 +127,10 @@ class AVLTree
     * Gets vector of function calls.
     */
     std::vector<std::string> getFunctionOrder() const;
+
+    //helper function(s)
+    int getBalance(Node *& n);
+    void setHeight(Node *& n);
 
   private:
     /**
