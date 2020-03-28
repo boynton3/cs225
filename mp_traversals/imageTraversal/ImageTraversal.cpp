@@ -34,34 +34,32 @@ double ImageTraversal::calculateDelta(const HSLAPixel & p1, const HSLAPixel & p2
 //   return !(valid[x][y]);
 // }
 
-ImageTraversal::Iterator::Iterator(const PNG & png, const Point & start, double tolerance, ImageTraversal *point) {
+//this needs to be done for the individual data structures :/
+// ImageTraversal::~ImageTraversal() {
+
+// }
+// ImageTraversal::Iterator::Iterator(const PNG & png, const Point & start, double tolerance) {
+//   //point_ = point;
+//   png_ = png;
+//   start_ = start;
+//   current_ = start_;
+//   tolerance_ = tolerance;
+
+//   // std::vector<bool> val(png_.width()*png_.height());
+//   // for (unsigned i = 0; i < png_.width(); i++) {
+//   //   std::vector<bool> val;
+//   //   vec.push_back(val);
+//   //   for (unsigned j = 0; j <png_.height(); j++) {
+//   //     vec[i].push_back(false);
+//   //   }
+    
+//   // }
+//   // vec[start_.x][start.y] = true;
+
+// }
+
+ImageTraversal::Iterator::Iterator(ImageTraversal* point) {
   point_ = point;
-  png_ = png;
-  start_ = start;
-  current_ = start_;
-  tolerance_ = tolerance;
-
-  unsigned w = 0;
-  unsigned h = 0;
-  
-  //unsigned area = png_.width() * png_.height();
-  vec.resize(png_.width(), std::vector<bool> (png_.height()));
-
-  while (w < png_.width()) {
-    h = 0;
-    while( h < png_.height()) {
-      vec[w][h] = false;
-      h++;
-    }
-    w++;
-  }
-
-  if (!isValid(current_) == false) {
-    vec[current_.x][current_.y] = true;
-  }
-
-  end_ = false;
-  
 }
 
 /**
@@ -70,9 +68,13 @@ ImageTraversal::Iterator::Iterator(const PNG & png, const Point & start, double 
 ImageTraversal::Iterator::Iterator() {
   /** @todo [Part 1] */
   point_ = NULL;
-  end_ = false;
 }
 
+// ImageTraversal::Iterator::~Iterator() {
+//   for (unsigned i = 0; i < png_.width(); i++) {
+//     dele
+//   }
+// }
 
 /**
  * Iterator increment opreator.
@@ -81,72 +83,89 @@ ImageTraversal::Iterator::Iterator() {
  */
 ImageTraversal::Iterator & ImageTraversal::Iterator::operator++() {
   /** @todo [Part 1] */
-  
- 
+
+  /** All this mumbo jumbo has been moved to
+   * the BFS and DFS files so it can be checked
+   * and done for each respective data structure
+   * 
+   * Now this ACTUALLY makes the ++operator
+   * and forward iterator simple
+   */
+    
   //remember that you are starting in 
   //the bottom-left corner
   // just like the example
   
-  //shift in x direction
-  Point left = Point(current_.x - 1, current_.y);
-  Point right = Point(current_.x + 1, current_.y);
-  //shift in y direction
-  Point above = Point(current_.x, current_.y - 1);
-  Point below = Point(current_.x, current_.y + 1);
+  // //shift in x direction
+  // Point left = Point(current_.x - 1, current_.y);
+  // Point right = Point(current_.x + 1, current_.y);
+  // //shift in y direction
+  // Point above = Point(current_.x, current_.y - 1);
+  // Point below = Point(current_.x, current_.y + 1);
   
-
-  HSLAPixel pix = png_.getPixel(start_.x, start_.y);
-  double delta_1 = calculateDelta(pix, png_.getPixel(current_.x + 1, current_.y));
-  double delta_2 = calculateDelta(pix, png_.getPixel(current_.x - 1, current_.y));
-  double delta_3 = calculateDelta(pix, png_.getPixel(current_.x, current_.y + 1));
-  double delta_4 = calculateDelta(pix, png_.getPixel(current_.x, current_.y - 1));
+  // vec[current_.x][current_.y] = true;
+  // HSLAPixel pix = png_.getPixel(start_.x, start_.y);
+  // double delta_1 = calculateDelta(pix, png_.getPixel(current_.x + 1, current_.y));
+  // double delta_2 = calculateDelta(pix, png_.getPixel(current_.x - 1, current_.y));
+  // double delta_3 = calculateDelta(pix, png_.getPixel(current_.x, current_.y + 1));
+  // double delta_4 = calculateDelta(pix, png_.getPixel(current_.x, current_.y - 1));
     
 
-  //now we need to add these points
-  //if x < 0, it's left
-  if (current_.x + 1 < png_.width() && delta_1 < tolerance_) {
-    point_->add(right);
-  }
+  // //now we need to add these points
+  // //if x < 0, it's left
+  // if (current_.x + 1 < png_.width() && delta_1 < tolerance_) {
+  //   point_->add(right);
+  // }
 
-  //left
-  if (current_.x - 1 >= 0 && delta_2 < tolerance_) {
-    point_->add(left);
-  }
+  // //left
+  // if (current_.x - 1 >= 0 && delta_2 < tolerance_) {
+  //   point_->add(left);
+  // }
 
-  //above   
-  if (current_.y - 1 >= 0 && delta_3 < tolerance_) {
-    point_->add(above);
-  }
+  // //above   
+  // if (current_.y - 1 >= 0 && delta_3 < tolerance_) {
+  //   point_->add(above);
+  // }
     
-  //below
-  if(current_.y + 1 < png_.height() && delta_4 < tolerance_) {
-    point_->add(below);
-  }
+  // //below
+  // if(current_.y + 1 < png_.height() && delta_4 < tolerance_) {
+  //   point_->add(below);
+  // }
 
-  if (point_->empty()) {
+  // if (point_->empty()) {
   
-    atEnd(true);
-    return *this;
-  }
+  //   //atEnd(true);
+  //   return *this;
+  // }
 
-  Point temp = point_->pop();
-  //if (vec[temp.x + temp.y * png_.width()] == true) {
+  // Point temp = point_->pop();
+  // //if (vec[temp.x + temp.y * png_.width()] == true) {
+  //   if (point_->empty()) {
+  //     point_ = NULL;
+  //     //atEnd(true);
+  //     return *this;
+  //   }
+  //   temp = point_->pop();
+  // //}
+  // start_ = temp;
+
+  // //vec[start_.x + start_.y * png_.width()] = true;
+
+  // path.push_back(start_);
+
+    
+  // //might need to edit this in
+  // //return *this;
+  // return *this;
+  if (!point_->empty() && point_ != NULL) {
+    point_->next_();
     if (point_->empty()) {
       point_ = NULL;
-      atEnd(true);
-      return *this;
     }
-    temp = point_->pop();
-  //}
-  start_ = temp;
+  } else {
+    point_ = NULL;
+  }
 
-  //vec[start_.x + start_.y * png_.width()] = true;
-
-  path.push_back(start_);
-
-    
-  //might need to edit this in
-  //return *this;
   return *this;
 
 }
@@ -159,12 +178,15 @@ ImageTraversal::Iterator & ImageTraversal::Iterator::operator++() {
 Point ImageTraversal::Iterator::operator*() {
   /** @todo [Part 1] */
   //check if the point is null or empty
-  if (point_ != NULL || !point_->empty()) {
-    return start_;
-  }
-  //might be -1,-1
-  return Point(-1, -1);
+  if (!point_->empty() && point_ != NULL) {
+    return point_->peek();
+  } else {
+    //might be -1,-1
+    point_ = NULL;
+    return Point(0, 0);
   //return current_;
+  //return point_->peek();
+  }
 }
 
 /**
@@ -174,7 +196,7 @@ Point ImageTraversal::Iterator::operator*() {
  */
 bool ImageTraversal::Iterator::operator!=(const ImageTraversal::Iterator &other) {
   /** @todo [Part 1] */
-  return end_ != other.end_;
+  return !(this->point_ == other.point_);
 }
 
 
@@ -183,21 +205,21 @@ bool ImageTraversal::Iterator::operator!=(const ImageTraversal::Iterator &other)
 //   return !(visited[x][y]);
 // }
 //if we can even reach this point in the image
-bool ImageTraversal::Iterator::isValid(Point point) {
-  Point temp = point;
-  if (temp.y >= png_.height() || temp.x >= png_.width()) {
-    return false;
-  }
+// bool ImageTraversal::Iterator::isValid(Point point) {
+//   Point temp = point;
+//   if (temp.y >= png_.height() || temp.x >= png_.width()) {
+//     return false;
+//   }
 
   
-  HSLAPixel & b = png_.getPixel(current_.x, current_.y);
-  HSLAPixel & t = png_.getPixel(temp.x, temp.y);
-  if (calculateDelta(b, t) >= tolerance_) {
-    return false;
-  }
-  return true;
-}
+//   HSLAPixel & b = png_.getPixel(current_.x, current_.y);
+//   HSLAPixel & t = png_.getPixel(temp.x, temp.y);
+//   if (calculateDelta(b, t) >= tolerance_) {
+//     return false;
+//   }
+//   return true;
+// }
 
-void ImageTraversal::Iterator::atEnd(bool e) {
-  end_ = e;
-}
+// void ImageTraversal::Iterator::atEnd(bool e) {
+//   end_ = e;
+// }

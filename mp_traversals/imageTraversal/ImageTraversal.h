@@ -39,26 +39,26 @@ public:
     /** @todo [Part 1] */
     /** add member functions if neccesary*/
     //Iterator(ImageTraversal *point);
-    Iterator(const PNG & png, const Point & start, double tolerance, ImageTraversal * point);
-    
-    bool isValid(Point point);
-    void atEnd(bool e);
+    //~Iterator();
+    //Iterator(const PNG & png, const Point & start, double tolerance);
+    Iterator(ImageTraversal* point);
+    //bool isValid(Point point);
+    //void atEnd(bool e);
     
 
   private:
     /** @todo [Part 1] */
     /** add private members here if neccesary*/
-    ImageTraversal *point_;
+    ImageTraversal * point_;
 
-    Point start_;
-    Point current_;
-    PNG png_;
-    double tolerance_;
+    // Point start_;
+    // Point current_;
+    // PNG png_;
+    //double tolerance_;
    
-    vector<Point> path;
-    std::vector<vector<bool>> vec;
-
-    bool end_;
+    // vector<Point> path;
+    // std::vector<vector<bool>> vec;
+    
     
 
   };
@@ -96,6 +96,15 @@ need to implement this
    * Virtual function. Derived class need to implement this
    */
   virtual bool empty() const = 0;
+
+  //need to implement virtual function
+  virtual Point& startingPoint() = 0;
+  virtual Point next_() = 0;
+  virtual double toleranceVal() = 0;
+  virtual HSLAPixel& getPixel(const Point& point) = 0;
+  virtual void deleted() = 0;
+
+
 
 private:
   static double calculateDelta(const HSLAPixel & p1, const HSLAPixel & p2);  

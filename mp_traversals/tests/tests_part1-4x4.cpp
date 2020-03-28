@@ -109,7 +109,13 @@ TEST_CASE("DFS visits all points within a tolerance (includes pixels on image ed
   
   DFS t(png, startPoint, 0.2);
   unsigned count = 0;
-  for (const Point & p : t) { count++; }
+  std::cout << "w" << std::endl;
+  for (const Point & p : t) { 
+    std::cout << "h" << std::endl;
+    count++;
+    std::cout << "a" << std::endl; 
+    }
+  std::cout << "t" << std::endl;
 
   REQUIRE( count == 12 );
 }
