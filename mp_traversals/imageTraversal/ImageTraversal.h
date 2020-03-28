@@ -7,8 +7,10 @@
 #include "../cs225/HSLAPixel.h"
 #include "../cs225/PNG.h"
 #include "../Point.h"
+#include <vector>
 
 using namespace cs225;
+using std::vector;
 
 /**
  * A base class for traversal algorithms on images.
@@ -36,13 +38,31 @@ public:
 
     /** @todo [Part 1] */
     /** add member functions if neccesary*/
+    //Iterator(ImageTraversal *point);
+    Iterator(const PNG & png, const Point & start, double tolerance, ImageTraversal * point);
+    
+    bool isValid(Point point);
+    void atEnd(bool e);
+    
 
   private:
     /** @todo [Part 1] */
     /** add private members here if neccesary*/
+    ImageTraversal *point_;
+
+    Point start_;
+    Point current_;
+    PNG png_;
+    double tolerance_;
+   
+    vector<Point> path;
+    std::vector<vector<bool>> vec;
+
+    bool end_;
+    
 
   };
-
+  
   /**
    * The begining of an iterator
    * Virtual function. Derived class need to implement this
@@ -67,7 +87,8 @@ public:
   virtual Point pop() = 0;
   /**
    * Return but not remove the next point of the traversal
-   * Virtual function. Derived class need to implement this
+   * Virtual function. Derived class     Iterator(ImageTraversal*,PNG, Point, double);
+need to implement this
    */
   virtual Point peek() const = 0;
   /**

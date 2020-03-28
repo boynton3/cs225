@@ -8,6 +8,9 @@
 #include <cmath>
 #include <list>
 #include <queue>
+//might take this out if they want us to use queue
+#include <stack>
+
 
 #include "../cs225/PNG.h"
 #include "../Point.h"
@@ -35,4 +38,9 @@ public:
 private:
   /** @todo [Part 1] */
   /** add private members here*/
+  std::queue<Point> p;
+  Point start_;
+  PNG png_;
+  double tolerance_;
+  Iterator iterate;
 };

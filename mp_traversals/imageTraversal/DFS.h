@@ -35,4 +35,11 @@ public:
 private:
 	/** @todo [Part 1] */
 	/** add private members here*/
+  //every ImageTraversal needs to start at a point
+  std::stack<Point> p;
+
+  Point start_;
+  PNG png_;
+  double tolerance_;
+
 };
