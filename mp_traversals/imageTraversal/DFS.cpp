@@ -109,7 +109,7 @@ void DFS::deleted() {
  */
 double DFS::calculateDelta(const Point& other) {
   //pixels might need to be const
-  HSLAPixel& p1 = getPixel(start_);
+  const HSLAPixel& p1 = getPixel(start_);
   HSLAPixel& p2 = getPixel(other);
   double h = fabs(p1.h - p2.h);
   double s = p1.s - p2.s;

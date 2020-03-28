@@ -71,9 +71,7 @@ ImageTraversal::Iterator::Iterator() {
 }
 
 // ImageTraversal::Iterator::~Iterator() {
-//   for (unsigned i = 0; i < png_.width(); i++) {
-//     dele
-//   }
+//   delete point_;
 // }
 
 /**

@@ -30,5 +30,9 @@ public:
 private:
 	/** @todo [Part 2] */
 	/** add private members here*/
+  PNG* png_;
+
+  vector<ColorPicker*> color_;
+  vector<ImageTraversal*> point_;
 
 };

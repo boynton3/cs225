@@ -18,6 +18,10 @@ using namespace cs225;
  */
 FloodFilledImage::FloodFilledImage(const PNG & png) {
   /** @todo [Part 2] */
+  png_ = new PNG(png);
+
+  vector<ImageTraversal*> point_;
+  vector<ColorPicker*> color_;
 }
 
 /**
@@ -29,6 +33,8 @@ FloodFilledImage::FloodFilledImage(const PNG & png) {
  */
 void FloodFilledImage::addFloodFill(ImageTraversal & traversal, ColorPicker & colorPicker) {
   /** @todo [Part 2] */
+  point_.push_back(&traversal);
+  color_.push_back(&colorPicker);
 }
 
 /**
@@ -53,5 +59,41 @@ void FloodFilledImage::addFloodFill(ImageTraversal & traversal, ColorPicker & co
 Animation FloodFilledImage::animate(unsigned frameInterval) const {
   Animation animation;
   /** @todo [Part 2] */
+
+  animation.addFrame(*png_);
+  ImageTraversal::Iterator iterator;
+  unsigned count = 0;
+
+  //visit every pixel within image based on the order provided
+  //by the imageTraversal iterator
+  for(unsigned i = 0; i < point_.size(); i++) {
+    //for(iterator = point_[i].begin())
+    ImageTraversal::Iterator traverse = point_[i];
+    ColorPicker* colors = color_[i];
+
+    ImageTraversal::Iterator beginning = point_[i]->begin();
+    ImageTraversal::Iterator ending = point_[i]->end();
+
+    for( iterator = beginning; iterator != ending; ++iterator) {
+      if (count != frameInterval) {
+        HSLAPixel current = png_->getPixel((*iterator).x, (*iterator).y);
+        HSLAPixel pixel = color_[i]->getColor((*iterator).x, (*iterator).y);
+
+        current.h = pixel.h;
+        current.s = pixel.s;
+        current.l = pixel.l;
+        current.a = pixel.a;
+
+        count++;
+
+      }
+      if (count == frameInterval) {
+        animation.addFrame(*png_);
+        count = 0;
+      }
+    }
+    animation.addFrame(*png_);
+  }
+  //animation.addFrame(png_);
   return animation;
 }
