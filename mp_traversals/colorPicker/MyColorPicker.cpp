@@ -15,19 +15,9 @@ HSLAPixel MyColorPicker::getColor(unsigned x, unsigned y) {
 
   double pix_x = x - point_.x;
   double pix_y = y - point_.y;
-  // double c = sqrt((pix_x * pix_x) + (pix_y * pix_y));
-  double c = cos(x);
-//   HSLAPixel pixel;
-//   int hue = cos(x) + (y*15);
-//   pixel.l = 0.5;
-//   pixel.s = 1;
 
-//   while (hue < 360) {
-//     hue = hue - 360;
-//     pixel.h = hue;
-//   }
-//   return HSLAPixel();
-// }
+  double c = cos(x);
+
 double p = 1;
 if( c > point_.x ) {
   p = 5;
