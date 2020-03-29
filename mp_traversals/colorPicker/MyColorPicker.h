@@ -15,5 +15,6 @@ public:
   MyColorPicker(Point p);
 
 private:
+Point point_;
 
 };

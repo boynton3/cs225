@@ -25,12 +25,13 @@ int main() {
   png.readFromFile("tests/pacman.png");
   FloodFilledImage image(png);
 
-  BFS bfs(png, Point(20,20), 0.5);
+  BFS bfs(png, Point(1,1), 0.5);
   DFS dfs(png, Point(2, 2), 0.1);
 
-  MyColorPicker color(Point(5,5));
+  MyColorPicker color(Point(15,4));
+  MyColorPicker c(Point(2, 15));
   image.addFloodFill(bfs, color);
-  image.addFloodFill(dfs, color);
+  image.addFloodFill(dfs, c);
 
   Animation animation = image.animate(1000);
 
