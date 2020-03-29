@@ -27,11 +27,11 @@ Point DFS::next_() {
   valid_.insert(current_);
 
   //shift in x direction
-  Point left = Point(current_.x - 1, current_.y);
-  Point right = Point(current_.x + 1, current_.y);
-  //shift in y direction
-  Point above = Point(current_.x, current_.y - 1);
-  Point below = Point(current_.x, current_.y + 1);
+  // Point left = Point(current_.x - 1, current_.y);
+  // Point right = Point(current_.x + 1, current_.y);
+  // //shift in y direction
+  // Point above = Point(current_.x, current_.y - 1);
+  // Point below = Point(current_.x, current_.y + 1);
   
   //vec[current_.x][current_.y] = true;
   // HSLAPixel pix = png_.getPixel(start_.x, start_.y);
@@ -43,23 +43,23 @@ Point DFS::next_() {
 
   //now we need to add these points
   //if x < 0, it's left
-  if (current_.x < png_.width() - 1 ) {
-    add(right);
+  if (current_.x < (png_.width() - 1)) {
+    add(Point(current_.x + 1, current_.y));
   }
-
+  
+  //below
+  if(current_.y < (png_.height() - 1)) {
+    add(Point(current_.x, current_.y + 1));
+  }
+  
   //left
   if (current_.x > 0 ) {
-    add(left);
+    add(Point(current_.x - 1, current_.y));
   }
 
   //above   
   if (current_.y > 0) {
-    add(above);
-  }
-    
-  //below
-  if(current_.y < png_.height() - 1) {
-    add(below);
+    add(Point(current_.x, current_.y - 1));
   }
 
   deleted();
@@ -110,7 +110,7 @@ void DFS::deleted() {
 double DFS::calculateDelta(const Point& other) {
   //pixels might need to be const
   const HSLAPixel& p1 = getPixel(start_);
-  HSLAPixel& p2 = getPixel(other);
+  const HSLAPixel& p2 = getPixel(other);
   double h = fabs(p1.h - p2.h);
   double s = p1.s - p2.s;
   double l = p1.l - p2.l;
@@ -137,8 +137,8 @@ DFS::DFS(const PNG & png, const Point & start, double tolerance) {
   start_ = start;
   tolerance_ = tolerance;
 
-  std::stack<Point> p;
-  std::unordered_set<Point, Hash> valid_;
+  // std::stack<Point> p;
+  // std::unordered_set<Point, Hash> valid_;
 
 
   add(start_);
@@ -202,9 +202,8 @@ Point DFS::peek() const {
  */
 bool DFS::empty() const {
   /** @todo [Part 1] */
-  // if (p.empty()) {
-  //   return true;
-  // }
-  // return false;
-  return p.empty();
+  if (p.empty()) {
+    return true;
+  }
+  return false;
 }

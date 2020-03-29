@@ -67,7 +67,7 @@ ImageTraversal::Iterator::Iterator(ImageTraversal* point) {
  */
 ImageTraversal::Iterator::Iterator() {
   /** @todo [Part 1] */
-  point_ = NULL;
+  //point_ = NULL;
 }
 
 // ImageTraversal::Iterator::~Iterator() {
@@ -181,7 +181,7 @@ Point ImageTraversal::Iterator::operator*() {
   } else {
     //might be -1,-1
     point_ = NULL;
-    return Point(0, 0);
+    return Point(-1, -1);
   //return current_;
   //return point_->peek();
   }

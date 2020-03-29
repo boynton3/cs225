@@ -42,9 +42,9 @@ public:
     //~Iterator();
     //Iterator(const PNG & png, const Point & start, double tolerance);
     Iterator(ImageTraversal* point);
-    static double calcHelper(const HSLAPixel & p1, const HSLAPixel & p2) {
-      return calculateDelta(p1, p2);
-    }
+    // static double calcHelper(const HSLAPixel & p1, const HSLAPixel & p2) {
+    //   return calculateDelta(p1, p2);
+    // }
     //bool isValid(Point point);
     //void atEnd(bool e);
     

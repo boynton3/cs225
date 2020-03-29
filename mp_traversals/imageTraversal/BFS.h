@@ -69,11 +69,12 @@ private:
     }
   };
 
-  std::queue<Point> p;
-  std::unordered_set<Point, Hash> valid_;
-  Point start_;
+  
+  
   PNG png_;
+  Point start_;
   double tolerance_;
   //Iterator iterate;
-  
+  std::queue<Point> p;
+  std::unordered_set<Point, Hash> valid_;
 };

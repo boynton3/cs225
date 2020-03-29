@@ -36,9 +36,4 @@ private:
   vector<ColorPicker*> color_;
   vector<ImageTraversal*> point_;
 
-  // PNG png_;
-  // ColorPicker * color_;
-  // ImageTraversal * point_;
-  // bool initial_;
-
 };

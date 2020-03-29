@@ -62,12 +62,14 @@ private:
     }
   };
 
-  std::stack<Point> p;
-  std::unordered_set<Point, Hash> valid_;
+  
+  PNG png_;
   Point start_;
   //Point next_;
-  PNG png_;
   double tolerance_;
   //Iterator iterate;
+
+  std::stack<Point> p;
+  std::unordered_set<Point, Hash> valid_;
 
 };

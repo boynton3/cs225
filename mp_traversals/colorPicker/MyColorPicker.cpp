@@ -23,3 +23,5 @@ HSLAPixel MyColorPicker::getColor(unsigned x, unsigned y) {
   }
   return HSLAPixel();
 }
+
+MyColorPicker::MyColorPicker(Point p) {}
