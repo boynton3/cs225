@@ -95,7 +95,7 @@ void SCHashTable<K, V>::remove(K const& key)
             table[idx].erase(it);
             //might be an operator for this
             //elems = elems - 1;
-            //elems --;
+            //--elems;
             break;
     }
     //return V();

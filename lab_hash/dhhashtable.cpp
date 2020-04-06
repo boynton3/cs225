@@ -100,16 +100,16 @@ void DHHashTable<K, V>::insert(K const& key, V const& value)
     //while(should_probe[idx]) {
         //if (table[idx] == NULL) {
         size_t hashIdx = hashes::secondary_hash(key, size);
-        idx = (idx + hashIdx) % size;
-        
+        idx = (idx + hashIdx);
+        if (idx >= size) {
+            idx %= size;
+        }
     }
     
     
     table[idx] = new std::pair<K, V> (key, value);
-    should_probe[idx] = true;
     //should_probe[idx] = true;
     //table[idx].push_front(p);
-
 
 }
 
@@ -127,6 +127,7 @@ void DHHashTable<K, V>::remove(K const& key)
         delete table[index];
 
         table[index] = NULL;
+        //should_probe[index] = false;
         --elems;
     }
 }
@@ -138,23 +139,36 @@ int DHHashTable<K, V>::findIndex(const K& key) const
      * @todo Implement this function
      */
     size_t idx = hashes::hash(key,size);
+    size_t hash = hashes::secondary_hash(key, size);
     //std::pair<K, V> p(key, size);
     size_t temp = idx;
 
-    while(should_probe[idx]) {
+    //while(should_probe[idx]) {
         //order MATTERS
-        if (table[idx] != NULL && table[idx]->first == key) {
-            return idx;
-        }
+    if (table[idx] != NULL && table[idx]->first == key) {
+        return idx;
+    }
         //then adjust
-        idx++;
-        idx %= size;
+    temp = temp + hash;
+    if (temp >= size) {
+        temp %= size;
+    }
 
         //this checks for loop, and if we can insert
-        if(idx == temp) {
-            break;
+        // if(idx == temp) {
+        //     break;
+        // }
+    while (temp != idx) {
+        if (table[temp] != NULL && table[temp]->first == key) {
+            return temp;
+        }
+
+        temp = temp + hash;
+        if (temp >= size) {
+            temp %= size;
         }
     }
+    //}
     return -1;
 
     //YOURE DOING TOO MUCH

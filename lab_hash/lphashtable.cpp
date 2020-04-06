@@ -172,12 +172,7 @@ int LPHashTable<K, V>::findIndex(const K& key) const
     //but whatever idget it works
     //sike this don't work
 
-    // for (size_t idx = 0; idx < size; ++idx) {
-    //     if (table[idx] != NULL && table[idx]->first == key) {
-    //         return idx;
-    //     }
-    // }
-    // return -1;
+
 }
 
 template <class K, class V>
