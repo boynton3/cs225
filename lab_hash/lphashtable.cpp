@@ -95,14 +95,15 @@ void LPHashTable<K, V>::insert(K const& key, V const& value)
     size_t idx = hashes::hash(key,size);
     //std::pair<K, V> p(key, value);
     //need to checks
-    while(table[idx] == NULL) {
+    while(should_probe[idx]) {
     //while(should_probe[idx]) {
         //if (table[idx] == NULL) {
-        table[idx] = new std::pair<K, V> (key, value);
-        should_probe[idx] = true;
+        ++idx;    
+        idx = idx%size;
     }
-        
-    idx = idx%size;
+    table[idx] = new std::pair<K, V> (key, value);
+    should_probe[idx] = true;
+    
     
     //should_probe[idx] = true;
     //table[idx].push_front(p);
@@ -119,10 +120,12 @@ void LPHashTable<K, V>::remove(K const& key)
 
     int index = findIndex(key);
 
-    if (index != -1) {
+    if (index > -1) {
         delete table[index];
 
         table[index] = NULL;
+        //need to include should_probe stuff
+        should_probe[index] = false;
         --elems;
     }
 }
@@ -166,7 +169,15 @@ int LPHashTable<K, V>::findIndex(const K& key) const
     return -1;
 
     //YOURE DOING TOO MUCH
-    //but whatever idget
+    //but whatever idget it works
+    //sike this don't work
+
+    // for (size_t idx = 0; idx < size; ++idx) {
+    //     if (table[idx] != NULL && table[idx]->first == key) {
+    //         return idx;
+    //     }
+    // }
+    // return -1;
 }
 
 template <class K, class V>
@@ -227,31 +238,32 @@ void LPHashTable<K, V>::resizeTable()
     std::pair<K,V> ** temp = new std::pair<K, V>*[ts];
     
     //need to fix this
-    delete[] should_probe;
-    should_probe = new bool[ts];
+    bool * check = new bool[ts];
 
 
     for (size_t idx = 0; idx < ts; ++idx) {
         
         // temp[idx].resize(table[idx].size());
         // typename std::list<std::pair<K, V>>::iterator newIt = temp[idx].begin();
-        table[idx] = NULL;
-        should_probe[idx] = false;
+        temp[idx] = NULL;
+        check[idx] = false;
     }
     for (size_t idx = 0; idx < size; ++idx) {
-        if(table[idx] != NULL) {
+        if(table[idx]) {
             size_t hashIdx = hashes::hash(table[idx]->first, ts);
-            while(temp[hashIdx] != NULL) {
-                hashIdx ++;
-                hashIdx %= ts;
+            while(temp[hashIdx]) {
+                ++hashIdx;
+                hashIdx %= size;
             }
             temp[hashIdx] = table[idx];
-            should_probe[hashIdx] = true;
+            check[hashIdx] = true;
         }
     }
         //we have to rehash everything
 
     delete[] table;
-    table = temp; 
+    delete[] should_probe;
+    table = temp;
+    should_probe = check; 
     size = ts;
 }

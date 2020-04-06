@@ -81,8 +81,36 @@ void DHHashTable<K, V>::insert(K const& key, V const& value)
      *  forget to mark the cell for probing with should_probe!
      */
 
-    (void) key;   // prevent warnings... When you implement this function, remove this line.
-    (void) value; // prevent warnings... When you implement this function, remove this line.
+    //(void) key;   // prevent warnings... When you implement this function, remove this line.
+    //(void) value; // prevent warnings... When you implement this function, remove this line.
+
+     ++elems;
+
+    if (shouldResize() == true) {
+        resizeTable();
+    }
+
+    //table = new std::list<std::pair<K, V>> pairing(key, value);
+    //override with size_t
+    //just like operator functions
+    size_t idx = hashes::hash(key,size);
+    //std::pair<K, V> p(key, value);
+    //need to checks
+    while(table[idx] != NULL) {
+    //while(should_probe[idx]) {
+        //if (table[idx] == NULL) {
+        size_t hashIdx = hashes::secondary_hash(key, size);
+        idx = (idx + hashIdx) % size;
+        
+    }
+    
+    
+    table[idx] = new std::pair<K, V> (key, value);
+    should_probe[idx] = true;
+    //should_probe[idx] = true;
+    //table[idx].push_front(p);
+
+
 }
 
 template <class K, class V>
@@ -91,6 +119,16 @@ void DHHashTable<K, V>::remove(K const& key)
     /**
      * @todo Implement this function
      */
+    //same as lphashtable except 
+    
+    int index = findIndex(key);
+
+    if (index > -1) {
+        delete table[index];
+
+        table[index] = NULL;
+        --elems;
+    }
 }
 
 template <class K, class V>
@@ -99,7 +137,28 @@ int DHHashTable<K, V>::findIndex(const K& key) const
     /**
      * @todo Implement this function
      */
+    size_t idx = hashes::hash(key,size);
+    //std::pair<K, V> p(key, size);
+    size_t temp = idx;
+
+    while(should_probe[idx]) {
+        //order MATTERS
+        if (table[idx] != NULL && table[idx]->first == key) {
+            return idx;
+        }
+        //then adjust
+        idx++;
+        idx %= size;
+
+        //this checks for loop, and if we can insert
+        if(idx == temp) {
+            break;
+        }
+    }
     return -1;
+
+    //YOURE DOING TOO MUCH
+    //but whatever idget it works
 }
 
 template <class K, class V>

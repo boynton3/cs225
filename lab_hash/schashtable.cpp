@@ -64,14 +64,14 @@ void SCHashTable<K, V>::insert(K const& key, V const& value)
     //table = new std::list<std::pair<K, V>> pairing(key, value);
     //override with size_t
     //just like operator functions
-    size_t idx = hashes::hash(key,size);
+    size_t idx = hashes::hash(key, size);
     std::pair<K, V> p(key, value);
     table[idx].push_front(p);
 
     ++elems;
     
 
-    if ((float)shouldResize() == true) {
+    if (shouldResize() == true) {
         resizeTable();
     }
 }
@@ -129,7 +129,7 @@ V& SCHashTable<K, V>::operator[](K const& key)
             return it->second;
     }
 
-    // was not found, insert a default-constructed version and return it
+    // was not ftable[idx] = new std::pair<K, V> (key, value);
     ++elems;
     if (shouldResize())
         resizeTable();
