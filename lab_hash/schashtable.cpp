@@ -91,12 +91,13 @@ void SCHashTable<K, V>::remove(K const& key)
     size_t idx = hashes::hash(key, size);
     //typename std::list<std::pair<K, V>>::iterator it;
     for (it = table[idx].begin(); it != table[idx].end(); ++it) {
-        if (it->first == key)
+        if (it->first == key){
             table[idx].erase(it);
             //might be an operator for this
             //elems = elems - 1;
             //--elems;
             break;
+        }
     }
     //return V();
 
@@ -113,8 +114,9 @@ V SCHashTable<K, V>::find(K const& key) const
     size_t idx = hashes::hash(key, size);
     typename std::list<std::pair<K, V>>::iterator it;
     for (it = table[idx].begin(); it != table[idx].end(); ++it) {
-        if (it->first == key)
+        if (it->first == key) {
             return it->second;
+        }
     }
     return V();
 }
@@ -198,8 +200,8 @@ void SCHashTable<K, V>::resizeTable()
             //need to hash
             size_t hashIdx = hashes::hash(it->first, ts);
             //might use insert instead
-            std::pair<K,V> temporary(it->first, it->second);
-            temp[hashIdx].push_front(temporary); 
+            std::pair<K,V> p(it->first, it->second);
+            temp[hashIdx].push_front(p); 
             
   
         }
