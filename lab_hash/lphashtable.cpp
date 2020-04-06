@@ -80,8 +80,34 @@ void LPHashTable<K, V>::insert(K const& key, V const& value)
      * Also, don't forget to mark the cell for probing with should_probe!
      */
 
-    (void) key;   // prevent warnings... When you implement this function, remove this line.
-    (void) value; // prevent warnings... When you implement this function, remove this line.
+    //(void) key;   // prevent warnings... When you implement this function, remove this line.
+    //(void) value; // prevent warnings... When you implement this function, remove this line.
+
+    ++elems;
+
+    if (shouldResize() == true) {
+        resizeTable();
+    }
+
+    //table = new std::list<std::pair<K, V>> pairing(key, value);
+    //override with size_t
+    //just like operator functions
+    size_t idx = hashes::hash(key,size);
+    //std::pair<K, V> p(key, value);
+    //need to checks
+    while(table[idx] == NULL) {
+    //while(should_probe[idx]) {
+        //if (table[idx] == NULL) {
+        table[idx] = new std::pair<K, V> (key, value);
+        should_probe[idx] = true;
+    }
+        
+    idx = idx%size;
+    
+    //should_probe[idx] = true;
+    //table[idx].push_front(p);
+
+
 }
 
 template <class K, class V>
@@ -90,6 +116,15 @@ void LPHashTable<K, V>::remove(K const& key)
     /**
      * @todo: implement this function
      */
+
+    int index = findIndex(key);
+
+    if (index != -1) {
+        delete table[index];
+
+        table[index] = NULL;
+        --elems;
+    }
 }
 
 template <class K, class V>
@@ -99,10 +134,39 @@ int LPHashTable<K, V>::findIndex(const K& key) const
     /**
      * @todo Implement this function
      *
-     * Be careful in determining when the key is not in the table!
+     * Be ca        for (it = table[idx].begin(); it != table[idx].end(); it++) {
+            //insert(it->first, it->second);
+            //need to hash
+            size_t hashIdx = hashes::hash(it->first, ts);
+            //might use insert instead
+            std::pair<K,V> temporary(it->first, it->second);
+            temp[hashIdx].push_front(temporary); 
+            
+  
+        }
+    }reful in determining when the key is not in the table!
      */
+    size_t idx = hashes::hash(key,size);
+    //std::pair<K, V> p(key, size);
+    size_t temp = idx;
 
+    while(should_probe[idx]) {
+        if (table[idx] != NULL && table[idx]->first == key) {
+            return idx;
+        }
+        //then adjust
+        idx++;
+        idx %= size;
+
+        //this checks for loop, and if we can insert
+        if(idx == temp) {
+            break;
+        }
+    }
     return -1;
+
+    //YOURE DOING TOO MUCH
+    //but whatever idget
 }
 
 template <class K, class V>
@@ -159,4 +223,35 @@ void LPHashTable<K, V>::resizeTable()
      *
      * @hint Use findPrime()!
      */
+    size_t ts = findPrime(2 * size);
+    std::pair<K,V> ** temp = new std::pair<K, V>*[ts];
+    
+    //need to fix this
+    delete[] should_probe;
+    should_probe = new bool[ts];
+
+
+    for (size_t idx = 0; idx < ts; ++idx) {
+        
+        // temp[idx].resize(table[idx].size());
+        // typename std::list<std::pair<K, V>>::iterator newIt = temp[idx].begin();
+        table[idx] = NULL;
+        should_probe[idx] = false;
+    }
+    for (size_t idx = 0; idx < size; ++idx) {
+        if(table[idx] != NULL) {
+            size_t hashIdx = hashes::hash(table[idx]->first, ts);
+            while(temp[hashIdx] != NULL) {
+                hashIdx ++;
+                hashIdx %= ts;
+            }
+            temp[hashIdx] = table[idx];
+            should_probe[hashIdx] = true;
+        }
+    }
+        //we have to rehash everything
+
+    delete[] table;
+    table = temp; 
+    size = ts;
 }

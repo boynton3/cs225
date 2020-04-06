@@ -4,6 +4,7 @@
  */
 
 #include "schashtable.h"
+#include <iostream>
  
 template <class K, class V>
 SCHashTable<K, V>::SCHashTable(size_t tsize)
@@ -54,6 +55,25 @@ void SCHashTable<K, V>::insert(K const& key, V const& value)
      * @todo Implement this function.
      *
      */
+    // table = new std::list<std::pair<K, V>>[rhs.size];
+    // for (size_t i = 0; i < rhs.size; i++)
+    //     table[i] = rhs.table[i];
+
+    
+
+    //table = new std::list<std::pair<K, V>> pairing(key, value);
+    //override with size_t
+    //just like operator functions
+    size_t idx = hashes::hash(key,size);
+    std::pair<K, V> p(key, value);
+    table[idx].push_front(p);
+
+    ++elems;
+    
+
+    if ((float)shouldResize() == true) {
+        resizeTable();
+    }
 }
 
 template <class K, class V>
@@ -66,7 +86,20 @@ void SCHashTable<K, V>::remove(K const& key)
      * Please read the note in the lab spec about list iterators and the
      * erase() function on std::list!
      */
-    (void) key; // prevent warnings... When you implement this function, remove this line.
+    //(void) key; // prevent warnings... When you implement this function, remove this line.
+
+    size_t idx = hashes::hash(key, size);
+    //typename std::list<std::pair<K, V>>::iterator it;
+    for (it = table[idx].begin(); it != table[idx].end(); ++it) {
+        if (it->first == key)
+            table[idx].erase(it);
+            //might be an operator for this
+            //elems = elems - 1;
+            //elems --;
+            break;
+    }
+    //return V();
+
 }
 
 template <class K, class V>
@@ -76,7 +109,13 @@ V SCHashTable<K, V>::find(K const& key) const
     /**
      * @todo: Implement this function.
      */
-
+    //just like the operator functions
+    size_t idx = hashes::hash(key, size);
+    typename std::list<std::pair<K, V>>::iterator it;
+    for (it = table[idx].begin(); it != table[idx].end(); ++it) {
+        if (it->first == key)
+            return it->second;
+    }
     return V();
 }
 
@@ -134,4 +173,38 @@ void SCHashTable<K, V>::resizeTable()
      *
      * @hint Use findPrime()!
      */
+    // int old = tableSize;
+    // tableSize *= 2;
+
+    //There is a findPrime function
+    //OVERRIDE THE SIZE
+    //tableSize might = size
+    // size_t ts = findPrime(2 * size);
+    // std::list<std::pair<K, V>> * t = new std::list<std::pair<K, V>>[ts];
+    
+    //old values need to be saved to copy over properly
+    //size_t oldS = size;
+    //std::list<std::pair<K,V>> * old = table;
+
+    size_t ts = findPrime(2 * size);
+    std::list<std::pair<K,V>> * temp = new std::list<std::pair<K, V>>[ts];
+    for (size_t idx = 0; idx < size; ++idx) {
+        
+        //temp[idx].resize(table[idx].size());
+        //typename std::list<std::pair<K, V>>::iterator newIt = temp[idx].begin();
+        //we have to rehash everything
+        for (it = table[idx].begin(); it != table[idx].end(); ++it) {
+            //insert(it->first, it->second);
+            //need to hash
+            size_t hashIdx = hashes::hash(it->first, ts);
+            //might use insert instead
+            std::pair<K,V> temporary(it->first, it->second);
+            temp[hashIdx].push_front(temporary); 
+            
+  
+        }
+    }
+    delete[] table;
+    table = temp; 
+    size = ts;
 }
