@@ -7,6 +7,7 @@
 
 #include <vector>
 
+
 // forward declare descriptor (used for printing, ignore)
 template <class Type, class Comp>
 class HeapNodeDescriptor;
@@ -17,7 +18,7 @@ class HeapNodeDescriptor;
  * @author Chase Geigle
  * @date Fall 2012
  */
-template <class T, class Compare = std::less<T>>
+template<class T, class Compare = std::less<T>>
 class heap
 {
   public:
@@ -154,7 +155,7 @@ class heap
     size_t parent(size_t currentIdx) const;
 
     /**
-     * Helper function that determines whether a given node has a
+     * Hlastelper function that determines whether a given node has a
      * child.
      *
      * @param currentIdx The index of the current node.
