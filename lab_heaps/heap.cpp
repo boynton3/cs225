@@ -36,8 +36,8 @@ template <class T, class Compare>
 bool heap<T, Compare>::hasAChild(size_t currentIdx) const
 {
     // @TODO Update to return whether the given node has a child
-    size_t iMax = _elems.size() - 1;
-    if (2 * currentIdx < iMax) {
+    size_t iMax = _elems.size();
+    if (2 * currentIdx + 2 <= iMax) {
         return true;
     }
     return false;
@@ -129,7 +129,7 @@ heap<T, Compare>::heap(const std::vector<T>& elems)
     // for (int i = 0; i < size; i++) {
     //     _elems.push_back(elems[i]);
     // }
-    for (size_t i = parent(_elems.size()); i > 1; i--) {
+    for (size_t i = parent(_elems.size() - 1); i > 1; i--) {
         heapifyDown(i);
     }
 }
@@ -157,8 +157,8 @@ T heap<T, Compare>::pop()
     T last = _elems[0];
     _elems[0] = _elems[_elems.size() - 1];
     
-    //need to swap last with root
-    std::swap(_elems[root()], _elems[_elems.size() - 1]);
+    //need to swap last with root  ^^
+    
     _elems.pop_back();
     
     heapifyDown(0);
@@ -172,7 +172,13 @@ T heap<T, Compare>::peek() const
     // @TODO Return, but do not remove, the element with highest priority
     //return T();
     //might need to cahnge this to call the root function
-    return _elems[0];
+    
+    //since we are zero indexing, if you do it this way
+    //you'll need to check is size = 0, and if it does
+    //return T()
+    //return _elems[0];
+
+    return _elems[root()];
 }
 
 template <class T, class Compare>
@@ -208,6 +214,10 @@ void heap<T, Compare>::updateElem(const size_t & idx, const T& elem)
     //     then goes is_unsignedif higherpriority heapify up 
     //     if not heapifyDown
     // }
+    _elems[idx] = elem;
+
+    heapifyDown(idx);
+    heapifyUp(idx);
 }
 
 
