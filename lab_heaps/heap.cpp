@@ -36,8 +36,12 @@ template <class T, class Compare>
 bool heap<T, Compare>::hasAChild(size_t currentIdx) const
 {
     // @TODO Update to return whether the given node has a child
-    size_t iMax = _elems.size();
-    if (2 * currentIdx + 2 <= iMax) {
+    // size_t iMax = _elems.size();
+    // if (2 * currentIdx + 2 <= iMax) {
+    //     return true;
+    // }
+    // return false;
+    if (_elems.size() > leftChild(currentIdx)) {
         return true;
     }
     return false;
@@ -112,24 +116,14 @@ heap<T, Compare>::heap(const std::vector<T>& elems)
     // @TODO Construct a heap using the buildHeap algorithm
     //might change increment
 
-    //make space
-    _elems.push_back(0);
-    //need to change type conversion
-    //int size = elems.size();
+    int size = elems.size();
 
-    size_t tmp = 0;
-
-    while(tmp < elems.size()) {
-        _elems.push_back(elems[tmp]);
-        //heapifyDown(i);
-        tmp = tmp + 1;
+    
+    for (int i = 0; i < size; i++) {
+        _elems.push_back(elems[i]);
     }
-    // _elems[i] = elem;
 
-    // for (int i = 0; i < size; i++) {
-    //     _elems.push_back(elems[i]);
-    // }
-    for (size_t i = parent(_elems.size() - 1); i > 1; i--) {
+    for (int i = parent(size); i >= 0; i--) {
         heapifyDown(i);
     }
 }
@@ -151,9 +145,8 @@ T heap<T, Compare>::pop()
     // return last;
 
     //like before but working with object T
-    if (empty()) {
-        return T();
-    }
+
+    
     T last = _elems[0];
     _elems[0] = _elems[_elems.size() - 1];
     
