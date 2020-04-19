@@ -260,14 +260,17 @@ class KDTree
      * @todo Add your helper functions here.
      */
     //seperate function uses pathag to calculate distance between points
+
     int partition(int d, int r, int l, int pivot);
     double getDistance(const Point<Dim>& t, const Point<Dim>& p) const;
-    //void sort(vector<Point<Dim>>& newPoints, int dimension);
-    void quickselect(int d, int r, int l, int k);
-    KDTreeNode * build(int start, int end, int d);
-    void clear(KDTreeNode* subroot);
-    KDTreeNode* copy(KDTreeNode* other);
 
+    void quickselect(int d, int r, int l, int k);
+
+    KDTreeNode * build(int start, int end, int d);
+
+    void clear(KDTreeNode* subroot);
+
+    Point<Dim> find(const Point<Dim> query, Point<Dim> curr, const KDTreeNode* root, int dim) const;
 
     vector<Point<Dim>> arr;
 };
