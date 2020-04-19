@@ -59,12 +59,10 @@ KDTree<Dim>::KDTree(const vector<Point<Dim>>& newPoints)
     //   root = NULL;
     //   return;
     // }
-    
-    arr = newPoints;
-    root = NULL;
-    if (arr.size()) {
-      build(0, arr.size() - 1, 0);
+    for (size_t i = 0; i < newPoints.size(); i++) {
+      arr.push_back(newPoints[i]);
     }
+    root = build(newPoints.size() - 1, 0, 0);
     
 }
 
@@ -79,11 +77,11 @@ KDTree<Dim>::KDTree(const KDTree<Dim>& other) {
   // if (!temp.empty()) {
   //   build(temp, 0, temp.size() - 1, 0);
   //}
-  size = other.size;
   
-  root = other.root;
+  
+  
   arr = other.arr;
-
+  root = build(root, arr.size()-1, 0, 0);
 }
 
 template <int Dim>
@@ -108,8 +106,7 @@ KDTree<Dim>::~KDTree() {
    * @todo Implement this function!
    */
   clear(root);
-  size = 0;
-  arr.clear();
+  
 }
 
 template <int Dim>
@@ -140,34 +137,31 @@ void KDTree<Dim>::quickselect(int d, int r, int l, int k) {
   }
 
   int pIdx = (l + r) / 2;
-  pIdx = partition(d, r, l, pIdx);
-  if (k == pIdx) {
+  int idx = partition(d, r, l, pIdx);
+  if (k == idx) {
     return;
-  } else if (k < pIdx) {
-    r = pIdx - 1;
+  } else if (k < idx) {
+    r = idx - 1;
     quickselect(d, r, l, k);
   } else {
-    l = pIdx + 1;
+    l = idx + 1;
     quickselect(d, r, l, k);
   }
 }
 
 template <int Dim>
-void KDTree<Dim>::build(int r, int l, int d) {
+typename KDTree<Dim>::KDTreeNode * KDTree<Dim>::build(int r, int l, int d) {
+  if (r < l) {
+    return NULL;
+  }
   int pivot = (l + r)/2;
 
   quickselect( d, r, l, pivot);
+  KDTreeNode * temp = new KDTreeNode(arr[pivot]);
 
-  if (l < pivot - 1) {
-    r = pivot + 1;
-    d = (d+1)%Dim;
-    build(r, l, d);
-  }
-  if (r > pivot + 1) {
-    l = pivot + 1;
-    d = (d+1)%Dim;
-    build(r, l, d);
-  }
+  temp->left = build((pivot - 1), l, (d+1)%Dim);
+  temp->right = build(r, (pivot + 1), (d+1)%Dim);
+  return temp;
 }
 
 template <int Dim>
@@ -198,13 +192,13 @@ void KDTree<Dim>::clear(KDTreeNode* subroot) {
   }
 }
 
-template <int Dim>
-typename KDTree<Dim>::KDTreeNode* KDTree<Dim>::copy(KDTreeNode* other) {
-  if (other != NULL) {
-    KDTreeNode * subRoot = new KDTreeNode;
-    subRoot-> right = copy(other->right);
-    subRoot-> left = copy(other-> left);
-    subRoot->point = other->point;
-    return subRoot;
-  }
-}
+// template <int Dim>
+// typename KDTree<Dim>::KDTreeNode* KDTree<Dim>::copy(KDTreeNode* other) {
+//   if (other != NULL) {
+//     KDTreeNode * subRoot = new KDTreeNode;
+//     subRoot-> right = copy(other->right);
+//     subRoot-> left = copy(other-> left);
+//     subRoot->point = other->point;
+//     return subRoot;
+//   }
+// }

@@ -264,7 +264,7 @@ class KDTree
     double getDistance(const Point<Dim>& t, const Point<Dim>& p) const;
     //void sort(vector<Point<Dim>>& newPoints, int dimension);
     void quickselect(int d, int r, int l, int k);
-    void build(int start, int end, int d);
+    KDTreeNode * build(int start, int end, int d);
     void clear(KDTreeNode* subroot);
     KDTreeNode* copy(KDTreeNode* other);
 
