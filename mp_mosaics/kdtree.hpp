@@ -16,10 +16,11 @@ bool KDTree<Dim>::smallerDimVal(const Point<Dim>& first,
     /**
      * @todo Implement this function!
      */
-    if (first[curDim] <= second[curDim]) {
+    if (first[curDim] < second[curDim]) {
       return true;
-    }
-
+    } else if (first[curDim] == second[curDim]) {
+      return (first < second);
+    } 
     //what if they're equal?
     return false;
 }
@@ -117,7 +118,7 @@ Point<Dim> KDTree<Dim>::findNearestNeighbor(const Point<Dim>& query) const
      */
     return find(query,root->point, root, 0);
 
-    return Point<Dim>();
+    //return Point<Dim>();
 }
 
 //helper function to calculate distance between two points 
@@ -264,19 +265,19 @@ Point<Dim> KDTree<Dim>::find(const Point<Dim> query, Point<Dim> curr, const KDTr
 
   //if the point we split is smaller than the radius, continue to look for 
   //closer points in opp direction
-  if (potentialBest <= currentBest && direction == true && root->right != NULL) {
+  if (potentialBest > currentBest) {
+    return curr;
+  } 
+  if (direction == true && root->right != NULL) {
     Point<Dim> closest = find(query, curr, root->right, (dim+1)%Dim);
     if (shouldReplace(query, curr, closest)) {
       curr = closest;
     }
-  } else if (potentialBest <= currentBest && direction == false && root->right == NULL) {
-    if (root->left != NULL) {
-      Point<Dim> closest = find(query, curr, root->left, (dim+1)%Dim);
-      if (shouldReplace(query, curr, closest)) {
-        curr = closest;
-      }
-    } 
-
+  } else if (direction == false && root->left != NULL) {
+    Point<Dim> closest = find(query, curr, root->left, (dim+1)%Dim);
+    if (shouldReplace(query, curr, closest)) {
+      curr = closest;
+    }
   }
 
   return curr;
