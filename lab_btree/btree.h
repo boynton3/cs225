@@ -343,7 +343,46 @@ size_t insertion_idx(const std::vector<T>& elements, const C& val)
 {
     /* TODO Your code goes here! */
 
-    return 5;
+    unsigned low = 0;
+    unsigned high = 0;
+
+    
+
+    //deciding if value occurs in left or right
+    //elements
+    if (elements.empty()) {
+        return 0;
+    }
+
+    if (elements[elements.size() - 1] < val) {
+        return elements.size();
+
+    }
+    if (elements[elements.size() - 1] == val) {
+        return elements.size() - 1;
+
+    }
+
+    if (elements[0] > val) {
+        return 0;
+    }
+
+    size_t idx = 0;
+    // for (size_t i = 0; i < elements.size() - 1; i++) {
+    //     return elements.size();
+    //     if (val <= elements[i]) {
+    //         idx = i;
+    //         break;
+    //     }
+    // }
+    
+    while (idx < elements.size() && elements[idx] < val) {
+        idx++;
+        if (elements.size() - 1 < idx) {
+            return elements.size();
+        } 
+    }
+    return idx;
 }
 
 #include "btree_given.cpp"

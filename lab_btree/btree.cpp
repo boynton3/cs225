@@ -29,6 +29,23 @@ V BTree<K, V>::find(const BTreeNode* subroot, const K& key) const
 
     size_t first_larger_idx = insertion_idx(subroot->elements, key);
 
+    if (subroot->elements.empty()) {
+        return V();
+    }
+
+
+    if (!subroot->elements.empty() && first_larger_idx < subroot->elements.size() && subroot->elements[first_larger_idx].key == key) {
+        return subroot->elements[first_larger_idx].value; 
+    }
+
+    //if there are leaves, then you need to do it for each child as
+    //the subroot
+
+    if (!subroot->is_leaf) {
+        return find(subroot->children[first_larger_idx], key);
+    }
+
+
     /* If first_larger_idx is a valid index and the key there is the key we
      * are looking for, we are done. */
 
@@ -141,6 +158,33 @@ void BTree<K, V>::split_child(BTreeNode* parent, size_t child_idx)
 
 
     /* TODO Your code goes here! */
+
+    //create a pointer to the new right and 
+    //the median within the child into the parent
+    parent->children.insert(child_itr, new_right);
+    //needs to be a pointer!!
+    parent->elements.insert(elem_itr, *mid_elem_itr);
+
+    
+    //need to copy over for front->end and then mid->end
+    //need to copy over first
+    new_right->elements.assign(mid_elem_itr + 1, new_left->elements.end());
+    //starting at front
+    if (!new_left->is_leaf) {
+        new_right->children.assign(mid_child_itr, new_left->children.end());
+    }
+
+    new_left->elements.assign(new_left->elements.begin(), mid_elem_itr);
+    if (!new_left->is_leaf) {
+        new_left->children.assign(new_left->children.begin(), mid_child_itr);
+    }
+
+    //copy over the left 
+    //starting at middle
+    return;
+
+
+
 }
 
 /**
@@ -165,4 +209,35 @@ void BTree<K, V>::insert(BTreeNode* subroot, const DataPair& pair)
     size_t first_larger_idx = insertion_idx(subroot->elements, pair);
 
     /* TODO Your code goes here! */
+
+
+    // if the subroot is empty
+    //inset the pair at the beginning
+    if (subroot->elements.empty()) {
+        subroot->elements.insert(subroot->elements.begin(), pair);
+    }
+
+    if (first_larger_idx < subroot->elements.size() && subroot->elements[first_larger_idx] == pair.key && !subroot->elements.empty()) {
+        return;
+    }
+    
+    //if they key doesnt exist or its a leaf
+    //then insert the pair into the subroot 
+    //you can insert at the begining + index to insert
+    if (subroot->is_leaf) {
+        subroot->elements.insert(subroot->elements.begin() + first_larger_idx, pair);
+    } else {
+
+
+
+    //otherwise, you need to determine the child and insert
+        BTreeNode * inserting = subroot->children[first_larger_idx];
+        insert(inserting, pair);
+
+    //this checks if it's too big
+    //if it is, we split it
+        if (inserting->elements.size() >= order) {
+            split_child(subroot, first_larger_idx);
+        }
+    }
 }
